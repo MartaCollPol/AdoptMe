@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">AdoptMe</string>
     <string name="action_settings">Settings</string>
+    <string name="descripcio">Descripció</string>
+    <string name="edat">Edat</string>
+    <string name="anys">Anys</string>
+    <string name="desconegut">Desconegut</string>
+    <string name="sexe">Sexe</string>
+    <string name="famella">Famella</string>
+    <string name="mascle">Mascle</string>
+    <string name="distancia">Distancia</string>
+    <string name="contacte">Informació de contacte:</string>
+    <string name="nom">Nom</string>
+    <string name="telefon">Telèfon</string>
+    <string name="email">Email</string>
 </resources>

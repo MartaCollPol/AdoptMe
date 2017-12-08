@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+       <!-- <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="800px"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/relativeLayout3">
+
+        </RelativeLayout>
+       -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout3">
+
+            <TextView
+                android:id="@+id/km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/distancia"
+                android:layout_alignBottom="@+id/distancia"
+                android:layout_toEndOf="@+id/anys"
+                android:layout_toRightOf="@+id/anys"
+                android:text="km"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/telefon"
+                android:layout_alignStart="@+id/telefon"
+                android:layout_below="@+id/telefon"
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="34dp"
+                android:text="@string/email"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/email"
+                android:layout_alignBottom="@+id/email"
+                android:layout_alignLeft="@+id/text_telefon"
+                android:layout_alignStart="@+id/text_telefon"
+                android:text="maly-cat@hotmail.es"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_telefon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/text_nom"
+                android:layout_alignStart="@+id/text_nom"
+                android:layout_alignTop="@+id/telefon"
+                android:inputType="phone"
+                android:text="609379610"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/telefon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/nom"
+                android:layout_alignStart="@+id/nom"
+                android:layout_below="@+id/nom"
+                android:layout_marginTop="39dp"
+                android:text="@string/telefon"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_nom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/nom"
+                android:layout_alignBottom="@+id/nom"
+                android:layout_alignLeft="@+id/text_distancia"
+                android:layout_alignStart="@+id/text_distancia"
+                android:text="Marta Coll"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:text="@string/nom"
+                android:textSize="18sp"
+                android:layout_below="@+id/contacte"
+                android:layout_alignLeft="@+id/contacte"
+                android:layout_alignStart="@+id/contacte" />
+
+            <TextView
+                android:id="@+id/contacte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/distancia"
+                android:layout_alignStart="@+id/distancia"
+                android:layout_below="@+id/distancia"
+                android:layout_marginTop="29dp"
+                android:text="@string/contacte"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/text_distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/km"
+                android:layout_alignBottom="@+id/km"
+                android:layout_alignLeft="@+id/check_male"
+                android:layout_alignStart="@+id/check_male"
+                android:inputType="number"
+                android:text="12"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/sexe"
+                android:layout_alignStart="@+id/sexe"
+                android:layout_below="@+id/check_male"
+                android:layout_marginTop="32dp"
+                android:text="@string/distancia"
+                android:textSize="18sp" />
+
+            <CheckBox
+                android:id="@+id/check_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/check_male"
+                android:layout_alignBottom="@+id/check_male"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="17dp"
+                android:layout_marginRight="17dp"
+                android:text="@string/famella"
+                android:clickable="false"/> <!-- inhabilitem el checkbox -->
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="800px"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="false"
+                app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+            <TextView
+                android:id="@+id/sexe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/edat"
+                android:layout_alignStart="@+id/edat"
+                android:layout_below="@+id/edat"
+                android:layout_marginTop="43dp"
+                android:text="@string/sexe"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_edat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/check_desconegut"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_toLeftOf="@+id/check_desconegut"
+                android:layout_toStartOf="@+id/check_desconegut"
+                android:inputType="number"
+                android:text="10"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/anys"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/text_edat"
+                android:layout_alignBottom="@+id/text_edat"
+                android:layout_alignLeft="@+id/text_descripcio"
+                android:layout_alignStart="@+id/text_descripcio"
+                android:text="@string/anys"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text_descripcio"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/descripcio"
+                android:layout_marginEnd="26dp"
+                android:layout_marginRight="26dp"
+                android:text="..."
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/edat"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBaseline="@+id/check_desconegut"
+                android:layout_alignBottom="@+id/check_desconegut"
+                android:layout_alignLeft="@+id/descripcio"
+                android:layout_alignStart="@+id/descripcio"
+                android:text="@string/edat"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/descripcio"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/imageView"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/descripcio"
+                android:textSize="18sp" />
+
+            <CheckBox
+                android:id="@+id/check_desconegut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/text_descripcio"
+                android:layout_alignRight="@+id/text_descripcio"
+                android:layout_below="@+id/text_descripcio"
+                android:layout_marginTop="42dp"
+                android:text="@string/desconegut"
+                android:clickable="false"/>
+
+            <CheckBox
+                android:id="@+id/check_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/sexe"
+                android:layout_alignBottom="@+id/sexe"
+                android:layout_alignLeft="@+id/anys"
+                android:layout_alignStart="@+id/anys"
+                android:text="@string/mascle"
+                android:clickable="false"/>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

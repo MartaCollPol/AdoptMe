@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "432255761083",
+    "firebase_url": "https://adoptmeapp-1.firebaseio.com",
+    "project_id": "adoptmeapp-1",
+    "storage_bucket": "adoptmeapp-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432255761083:android:7b4bac075ee2c2ad",
+        "android_client_info": {
+          "package_name": "coll.marta.provantfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432255761083-1oltrfp3qhbngm908b22q7rr4f6k4251.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqJ_JSDNfPFaCf0dMOOp8xovlj45dgNy8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432255761083:android:eeeaabd8bd0324ad",
+        "android_client_info": {
+          "package_name": "barcons.pol.adoptme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432255761083-1oltrfp3qhbngm908b22q7rr4f6k4251.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqJ_JSDNfPFaCf0dMOOp8xovlj45dgNy8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

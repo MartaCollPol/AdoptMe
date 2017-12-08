@@ -1,15 +1,21 @@
 package barcons.pol.adoptme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+//import per obtenir l'id unic del dispositiu
 
 public class MainActivity extends AppCompatActivity {
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +24,21 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                //utilitzarem per a creaActivity
             }
         });
+
+
+
     }
 
     @Override
@@ -49,4 +62,23 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void showinfo(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
+        Intent intent = new Intent(this, InfoActivity.class);
+        String adid= "1"; //id de l'anunci "query de key de l'anunci clicat"
+        intent.putExtra("ad",adid);
+        startActivity(intent);
+
+    }
+
+
+    /*Això anirà a first time activity
+    //mètode per afegir un nou usuari on userId ha de ser el número que segueix l'anumeració del database i name el nom que llegim a firsttimeActivity.
+    private void writeNewUser(String name, String id) {
+        User user = new User(name,id);
+
+        UsersRef.push().setValue(user);
+    }
+    */
 }
+

@@ -19,6 +19,8 @@ import barcons.pol.adoptme.Objectes.User;
 
 /**
  * Created by Marta on 08/12/2017.
+ *
+ *  Hola que tal...
  */
 
 

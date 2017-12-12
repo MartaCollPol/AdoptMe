@@ -18,11 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import barcons.pol.adoptme.Objectes.Ad;
-import barcons.pol.adoptme.Objectes.FirebaseReferences;
+import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Objectes.edat;
 
-//TODO: intent de càmera, guardar url a la base de dades i mostrar la imatge
+//TODO: intent de càmera (http://gpmess.com/blog/2013/10/02/como-cargar-fotos-en-una-aplicacion-android-desde-camara-galeria-y-otras-aplicaciones/)
+//TODO: guardar url a la base de dades i mostrar la imatge
 public class CreaActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -56,7 +57,7 @@ public class CreaActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String us= intent.getStringExtra("user"); // id de l'usuari que crea l'anunci
         final DatabaseReference UserRef = UsersRef.child(us);
-
+        final DatabaseReference CreatedRef = UserRef.child("created");
 
         //preomplim els camps d'informació de contacte si aquests es troben disponibles a la base de dadesz
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,8 +152,6 @@ public class CreaActivity extends AppCompatActivity {
                 //afegim l'anunci creat al camp "created" de l'usuari
                 HashMap<String, Object> Adcreated = new HashMap<>();
                 Adcreated.put(adkey, true);
-
-                DatabaseReference CreatedRef = UserRef.child("created");
                 CreatedRef.updateChildren(Adcreated);
 
                 finish();

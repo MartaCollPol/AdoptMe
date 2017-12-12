@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import barcons.pol.adoptme.Objectes.Ad;
-import barcons.pol.adoptme.Objectes.FirebaseReferences;
+import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Objectes.User;
 
 /**

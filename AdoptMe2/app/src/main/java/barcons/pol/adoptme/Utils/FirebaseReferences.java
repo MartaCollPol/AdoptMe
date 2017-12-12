@@ -1,4 +1,4 @@
-package barcons.pol.adoptme.Objectes;
+package barcons.pol.adoptme.Utils;
 
 /**
  * Created by Marta on 07/12/2017.

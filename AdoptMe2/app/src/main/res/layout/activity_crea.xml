@@ -6,24 +6,21 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+        <!-- <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="800px"
+             android:layout_alignParentEnd="true"
+             android:layout_alignParentRight="true"
+             android:id="@+id/relativeLayout3">
 
+         </RelativeLayout>
+        -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/relativeLayout3">
-
-            <TextView
-                android:id="@+id/km"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/distancia"
-                android:layout_alignBottom="@+id/distancia"
-                android:layout_toEndOf="@+id/anys"
-                android:layout_toRightOf="@+id/anys"
-                android:text="km"
-                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/email"
@@ -37,26 +34,29 @@
                 android:text="@string/email"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/i_text_email"
+            <EditText
+                android:id="@+id/c_text_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/email"
                 android:layout_alignBottom="@+id/email"
-                android:layout_alignLeft="@+id/i_text_telefon"
-                android:layout_alignStart="@+id/i_text_telefon"
-                android:text="maly-cat@hotmail.es"
+                android:layout_alignEnd="@+id/c_text_telefon"
+                android:layout_alignLeft="@+id/c_text_telefon"
+                android:layout_alignRight="@+id/c_text_telefon"
+                android:layout_alignStart="@+id/c_text_telefon"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/i_text_telefon"
+            <EditText
+                android:id="@+id/c_text_telefon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/i_text_nom"
-                android:layout_alignStart="@+id/i_text_nom"
+                android:layout_alignLeft="@+id/c_text_nom"
+                android:layout_alignStart="@+id/c_text_nom"
                 android:layout_alignTop="@+id/telefon"
-                android:text="609379610"
-                android:textSize="18sp" />
+                android:inputType="phone"
+                android:textSize="18sp"
+                android:layout_alignRight="@+id/c_text_nom"
+                android:layout_alignEnd="@+id/c_text_nom" />
 
             <TextView
                 android:id="@+id/telefon"
@@ -69,16 +69,17 @@
                 android:text="@string/telefon"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/i_text_nom"
+            <EditText
+                android:id="@+id/c_text_nom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/nom"
                 android:layout_alignBottom="@+id/nom"
-                android:layout_alignLeft="@+id/i_text_distancia"
-                android:layout_alignStart="@+id/i_text_distancia"
-                android:text="Marta Coll"
-                android:textSize="18sp" />
+                android:layout_alignLeft="@+id/c_check_male"
+                android:layout_alignStart="@+id/c_check_male"
+                android:textSize="18sp"
+                android:layout_toLeftOf="@+id/c_check_female"
+                android:layout_toStartOf="@+id/c_check_female" />
 
             <TextView
                 android:id="@+id/nom"
@@ -95,51 +96,29 @@
                 android:id="@+id/contacte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/distancia"
-                android:layout_alignStart="@+id/distancia"
-                android:layout_below="@+id/distancia"
-                android:layout_marginTop="29dp"
                 android:text="@string/contacte"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/i_text_distancia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/km"
-                android:layout_alignBottom="@+id/km"
-                android:layout_alignLeft="@+id/i_check_male"
-                android:layout_alignStart="@+id/i_check_male"
-                android:text="12"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/distancia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_below="@+id/c_check_male"
                 android:layout_alignLeft="@+id/sexe"
                 android:layout_alignStart="@+id/sexe"
-                android:layout_below="@+id/i_check_male"
-                android:layout_marginTop="32dp"
-                android:text="@string/distancia"
-                android:textSize="18sp" />
+                android:layout_marginTop="27dp" />
 
             <CheckBox
-                android:id="@+id/i_check_female"
+                android:id="@+id/c_check_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/i_check_male"
-                android:layout_alignBottom="@+id/i_check_male"
+                android:layout_alignBaseline="@+id/c_check_male"
+                android:layout_alignBottom="@+id/c_check_male"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="17dp"
                 android:layout_marginRight="17dp"
                 android:text="@string/famella"
-                android:clickable="false"/> <!-- inhabilitem el checkbox -->
+                />
 
 
             <ImageView
-                android:id="@+id/i_edit_image"
+                android:id="@+id/c_edit_image"
                 android:layout_width="match_parent"
                 android:layout_height="800px"
                 android:layout_alignParentLeft="true"
@@ -159,31 +138,32 @@
                 android:text="@string/sexe"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/i_text_edat"
+            <EditText
+                android:id="@+id/c_text_edat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/i_check_desconegut"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_toLeftOf="@+id/i_check_desconegut"
-                android:layout_toStartOf="@+id/i_check_desconegut"
-                android:text="10"
-                android:textSize="24sp" />
+                android:layout_alignTop="@+id/c_check_desconegut"
+                android:inputType="number"
+                android:textSize="24sp"
+                android:layout_alignRight="@+id/c_check_male"
+                android:layout_alignEnd="@+id/c_check_male"
+                android:layout_toRightOf="@+id/anys"
+                android:layout_toEndOf="@+id/anys" />
 
             <TextView
                 android:id="@+id/anys"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/i_text_edat"
-                android:layout_alignBottom="@+id/i_text_edat"
-                android:layout_alignLeft="@+id/i_text_descripcio"
-                android:layout_alignStart="@+id/i_text_descripcio"
+                android:layout_alignBaseline="@+id/c_text_edat"
+                android:layout_alignBottom="@+id/c_text_edat"
+                android:layout_alignLeft="@+id/c_text_descripcio"
+                android:layout_alignStart="@+id/c_text_descripcio"
                 android:text="@string/anys"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/i_text_descripcio"
+            <EditText
+                android:id="@+id/c_text_descripcio"
+                style="@android:style/TextAppearance.Holo.Widget.EditText"
                 android:layout_width="200dp"
                 android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
@@ -198,8 +178,8 @@
                 android:id="@+id/edat"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_alignBaseline="@+id/i_check_desconegut"
-                android:layout_alignBottom="@+id/i_check_desconegut"
+                android:layout_alignBaseline="@+id/c_check_desconegut"
+                android:layout_alignBottom="@+id/c_check_desconegut"
                 android:layout_alignLeft="@+id/descripcio"
                 android:layout_alignStart="@+id/descripcio"
                 android:text="@string/edat"
@@ -209,28 +189,28 @@
                 android:id="@+id/descripcio"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/i_edit_image"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/descripcio"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_below="@+id/c_edit_image"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <CheckBox
-                android:id="@+id/i_check_desconegut"
+                android:id="@+id/c_check_desconegut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/i_text_descripcio"
-                android:layout_alignRight="@+id/i_text_descripcio"
-                android:layout_below="@+id/i_text_descripcio"
+                android:layout_alignEnd="@+id/c_text_descripcio"
+                android:layout_alignRight="@+id/c_text_descripcio"
+                android:layout_below="@+id/c_text_descripcio"
                 android:layout_marginTop="42dp"
                 android:text="@string/desconegut"
-                android:clickable="false"/>
+                />
 
             <CheckBox
-                android:id="@+id/i_check_male"
+                android:id="@+id/c_check_male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/sexe"
@@ -238,8 +218,20 @@
                 android:layout_alignLeft="@+id/anys"
                 android:layout_alignStart="@+id/anys"
                 android:text="@string/mascle"
-                android:clickable="false"/>
+                />
         </RelativeLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp"
+        android:text="OK" />
 
 </RelativeLayout>

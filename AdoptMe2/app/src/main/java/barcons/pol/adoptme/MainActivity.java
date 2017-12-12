@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                //utilitzarem per a creaActivity
+                createAd(view);
             }
         });
 
@@ -67,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InfoActivity.class);
         String adid= "1"; //id de l'anunci "query de key de l'anunci clicat"
         intent.putExtra("ad",adid);
+        startActivity(intent);
+
+    }
+
+    public void createAd(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
+        Intent intent = new Intent(this, CreaActivity.class);
+        String userid= "1"; //id de l'anunci "query de key de l'anunci clicat"
+        intent.putExtra("user",userid);
         startActivity(intent);
 
     }

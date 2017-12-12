@@ -23,13 +23,15 @@ import barcons.pol.adoptme.Objectes.User;
  *  Hola que tal...
  */
 
-
+ //TODO: botó per aceptar, botó per tornar enrere
+ //TODO: mostra imagtge, i mostra distància
 public class InfoActivity extends AppCompatActivity {
 
-    //RootRef - obtenim una referència al root del Firebase json tree
+    //Referències a la base de dades del Firebase
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+    //Objectes per facilitar la lectura del contingut de la base de dades
     Ad anunci;
     User usuari;
 
@@ -38,20 +40,21 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_activity);
 
-        final TextView text_desc = (TextView)findViewById(R.id.text_descripcio);
-        final TextView text_edat = (TextView)findViewById(R.id.text_edat);
-        final TextView text_nom = (TextView)findViewById(R.id.text_nom);
-        final TextView text_email = (TextView)findViewById(R.id.text_email);
-        final TextView text_telf = (TextView)findViewById(R.id.text_telefon);
+        final TextView text_desc = (TextView)findViewById(R.id.i_text_descripcio);
+        final TextView text_edat = (TextView)findViewById(R.id.i_text_edat);
+        final TextView text_nom = (TextView)findViewById(R.id.i_text_nom);
+        final TextView text_email = (TextView)findViewById(R.id.i_text_email);
+        final TextView text_telf = (TextView)findViewById(R.id.i_text_telefon);
 
-        final CheckBox desconegut = (CheckBox)findViewById(R.id.check_desconegut);
-        final CheckBox famella = (CheckBox)findViewById(R.id.check_female);
-        final CheckBox mascle = (CheckBox)findViewById(R.id.check_male);
+        final CheckBox desconegut = (CheckBox)findViewById(R.id.i_check_desconegut);
+        final CheckBox famella = (CheckBox)findViewById(R.id.i_check_female);
+        final CheckBox mascle = (CheckBox)findViewById(R.id.i_check_male);
 
         Intent intent = getIntent();
         String ad= intent.getStringExtra("ad"); // id de l'anunci
         //Obtenir els valors d'un anunci dins d'un object Ad per mostrar-ho.
 
+        //llegim un únic cop el contingut de la base de dades de l'anunci corresponent a l'id proporcionat.
         AdsRef.child(ad).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -64,7 +67,7 @@ public class InfoActivity extends AppCompatActivity {
                         text_desc.setText(anunci.desc);
                         text_edat.setText(String.valueOf(anunci.edat.known));
                         desconegut.setChecked(anunci.edat.unknown);
-                        famella.setChecked(anunci.sexe.equals("famella"));
+                        famella.setChecked(anunci.sexe.equals("female"));
                         mascle.setChecked(anunci.sexe.equals("mascle"));
                         text_nom.setText(usuari.name);
                         text_email.setText(usuari.email);

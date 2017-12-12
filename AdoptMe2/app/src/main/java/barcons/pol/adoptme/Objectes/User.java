@@ -12,6 +12,7 @@ public class User {
     public Long phone;
 
 
+
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -21,6 +22,7 @@ public class User {
         this.id = id;
         this.email = null;
         this.phone = null;
+
     }
 
 }

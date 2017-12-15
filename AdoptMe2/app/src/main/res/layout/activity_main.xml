@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,19 +20,22 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"
-        android:id="@+id/include2" />
+    <include layout="@layout/content_main"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"
         app:backgroundTint="@color/colorPrimary"
-        app:elevation="0dp"
-        app:layout_anchor="@+id/include2"
-        app:layout_anchorGravity="bottom|right"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:rippleColor="@color/colorPrimary"
+        android:tint="@android:color/white"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:layout_marginRight="17dp"
+        android:layout_marginBottom="84dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="17dp" />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

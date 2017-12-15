@@ -2,19 +2,28 @@ package barcons.pol.adoptme;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 //import per obtenir l'id unic del dispositiu
 
 public class MainActivity extends AppCompatActivity {
 
-
+    //Referència a les autentificacions del firebase
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -23,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Button btn_prova = (Button)findViewById(R.id.btn_proves);
 
-
+        signInAnonymously();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_prova.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showinfo(v);
+            }
+        });
 
 
     }
@@ -63,6 +79,26 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //ho utilitzem per a poder fer servir el FirebaseStorage. Tots els usuaris seran anonims. https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/AnonymousAuthActivity.java#L71-L77
+    private void signInAnonymously() {
+        final String TAG = "AnonymousAuth";
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInAnonymously:success");
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        }
+                    }
+                });
+    }
+
+
     public void showinfo(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
         Intent intent = new Intent(this, InfoActivity.class);
         String adid= "1"; //id de l'anunci "query de key de l'anunci clicat"
@@ -80,13 +116,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*Això anirà a first time activity
-    //mètode per afegir un nou usuari on userId ha de ser el número que segueix l'anumeració del database i name el nom que llegim a firsttimeActivity.
-    private void writeNewUser(String name, String id) {
-        User user = new User(name,id);
-
-        UsersRef.push().setValue(user);
-    }
-    */
 }
 

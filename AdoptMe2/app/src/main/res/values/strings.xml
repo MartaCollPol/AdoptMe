@@ -13,4 +13,5 @@
     <string name="nom">Nom</string>
     <string name="telefon">Telèfon</string>
     <string name="email">Email</string>
+    <string name="action_OK">OK</string>
 </resources>

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,11 +32,24 @@ public class CreaActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
-
+    DatabaseReference UserRef;
+    DatabaseReference CreatedRef;
 
     //Objectes per facilitar la lectura del contingut de la base de dades
     Ad anunci=new Ad(); //invoquem el constructor per defecte
     User usuari=new User();
+
+    EditText text_desc;
+    EditText text_edat;
+    EditText text_nom;
+    EditText text_email;
+    EditText text_telf;
+
+    CheckBox desconegut;
+    CheckBox female;
+    CheckBox male;
+
+    String us;
 
 
     @Override
@@ -42,22 +57,23 @@ public class CreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea);
 
-        final EditText text_desc = (EditText) findViewById(R.id.c_text_descripcio);
-        final EditText text_edat = (EditText) findViewById(R.id.c_text_edat);
-        final EditText text_nom = (EditText)findViewById(R.id.c_text_nom);
-        final EditText text_email = (EditText) findViewById(R.id.c_text_email);
-        final EditText text_telf = (EditText)findViewById(R.id.c_text_telefon);
+        text_desc = (EditText) findViewById(R.id.c_text_descripcio);
+        text_edat = (EditText) findViewById(R.id.c_text_edat);
+        text_nom = (EditText)findViewById(R.id.c_text_nom);
+        text_email = (EditText) findViewById(R.id.c_text_email);
+        text_telf = (EditText)findViewById(R.id.c_text_telefon);
 
-        final CheckBox desconegut = (CheckBox)findViewById(R.id.c_check_desconegut);
-        final CheckBox female = (CheckBox)findViewById(R.id.c_check_female);
-        final CheckBox male = (CheckBox)findViewById(R.id.c_check_male);
+        desconegut = (CheckBox)findViewById(R.id.c_check_desconegut);
+        female = (CheckBox)findViewById(R.id.c_check_female);
+        male = (CheckBox)findViewById(R.id.c_check_male);
 
-        Button btn_ok = (Button)findViewById(R.id.btn_ok);
+
 
         Intent intent = getIntent();
         final String us= intent.getStringExtra("user"); // id de l'usuari que crea l'anunci
-        final DatabaseReference UserRef = UsersRef.child(us);
-        final DatabaseReference CreatedRef = UserRef.child("created");
+
+        UserRef = UsersRef.child(us);
+        CreatedRef = UserRef.child("created");
 
         //preomplim els camps d'informació de contacte si aquests es troben disponibles a la base de dadesz
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -117,10 +133,31 @@ public class CreaActivity extends AppCompatActivity {
         });
 
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Creem un anunci nou i guardem les dades corresponents a la base de dades
+
+
+
+    }
+
+    private void whenchecked(CheckBox a, CheckBox b) {
+        if (a.isChecked()) {
+            b.setChecked(false);
+        }
+    }
+
+    //Menú de la barra de dalt de CreaActivity, on hi posarem el botó de OK
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.menu_crea, menu);
+        return true;
+    }
+
+    //Opcions que hi haura a la barra de dalt (de moment només el botó OK)n
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_OK:
+                startActivity(new Intent(this, MainActivity.class));
+
                 anunci.user=us;
                 if (female.isChecked()){
                     anunci.sexe="female";
@@ -154,19 +191,11 @@ public class CreaActivity extends AppCompatActivity {
                 Adcreated.put(adkey, true);
                 CreatedRef.updateChildren(Adcreated);
 
-                finish();
+                return true;
 
 
-            }
-        });
 
-
-    }
-
-    private void whenchecked(CheckBox a, CheckBox b) {
-        if (a.isChecked()) {
-            b.setChecked(false);
-        }
+        } return super.onOptionsItemSelected(item);
     }
 
 

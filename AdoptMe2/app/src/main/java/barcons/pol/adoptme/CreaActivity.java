@@ -151,7 +151,7 @@ public class CreaActivity extends AppCompatActivity {
         return true;
     }
 
-    //Opcions que hi haura a la barra de dalt (de moment només el botó OK)
+    //Opcions que hi haura a la barra de dalt (de moment només el botó OK)n
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

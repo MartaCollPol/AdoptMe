@@ -37,3 +37,6 @@ dependencies {
 
 //firebase
 apply plugin: 'com.google.gms.google-services'
+
+//Add Library -Bar Navigator
+compile 'com.android.support:design:25.1.1'

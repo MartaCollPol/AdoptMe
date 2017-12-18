@@ -29,8 +29,7 @@ import barcons.pol.adoptme.Utils.FirebaseReferences;
  *
  */
 
- //TODO: botó per aceptar, botó per tornar enrere
- //TODO: mostra imagtge, i mostra distància
+ //TODO: mostra distància, boto per tornar enrere
 public class InfoActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -75,13 +74,15 @@ public class InfoActivity extends AppCompatActivity {
         ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                new URLtoBitmap().execute(uri);
+                //String url = uri.toString();
+                new DownloadImage().execute(uri);
             }
         });
 
 
         //llegim un únic cop el contingut de la base de dades de l'anunci corresponent a l'id proporcionat.
         AdsRef.child(ad).addListenerForSingleValueEvent(new ValueEventListener() {
+            final String TAG = "InfoDataSnapshot";
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 anunci = dataSnapshot.getValue(Ad.class); //capturem tots els camps de l'anunci
@@ -89,8 +90,11 @@ public class InfoActivity extends AppCompatActivity {
                 UsersRef.child(anunci.user).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         usuari = dataSnapshot.getValue(User.class); //capturem l'usuari que ha creat l'anunci
-                        //omplim els texts views corresponents "falten les comprovacions de si mascle esta checked famella no i el mateix amb l'edat.
+
+                        //omplim els texts views corresponents "falten les comprovacions de si mascle
+                        // esta checked famella no i el mateix amb l'edat.
                         text_desc.setText(anunci.desc);
                         text_edat.setText(String.valueOf(anunci.edat.known));
                         desconegut.setChecked(anunci.edat.unknown);
@@ -104,7 +108,7 @@ public class InfoActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.i("mcoll", "Error when capturing the user value");
+                        Log.i(TAG, "Error when capturing the user value");
                     }
 
                 });
@@ -113,67 +117,33 @@ public class InfoActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i("mcoll", "Error when capturing the ad value");
+                Log.i(TAG, "Error when capturing the ad value");
             }
-
 
         });
 
 
-
     }
 
-    //hi ha la classe per fer-ho amb el bitmap comentada a sota, passa el mateix en ambdos casos
-    private class URLtoBitmap extends AsyncTask<Uri, Void, String> {
-        private static final String TAG = "URLtoBitmap";
+    //Asynctask per descarregar la imatge des de l'url
+    private class DownloadImage extends AsyncTask<Uri, Void, String> {
+        private static final String TAG = "DownloadImage";
         @Override
         protected String doInBackground(Uri... params) {
-
-            //peta aqui:  android.os.NetworkOnMainThreadException
-            // at android.os.StrictMode$AndroidBlockGuardPolicy.onNetwork(StrictMode.java:1303)
-            String result = params.toString();
-            return result;
-            //Bitmap result = BitmapFactory.decodeStream(downloadurl.openConnection().getInputStream());
-
+            return params[0].toString();
 
         }
 
         @Override
         protected void onPostExecute(String result){
             if(result!=null){
-               //showimg.setImageBitmap(result);
-               Picasso.with(InfoActivity.this).load(result).fit().centerCrop().into(showimg);
+               Picasso.with(InfoActivity.this).load(result).into(showimg);
             }
             else Log.i(TAG,"Could not set the image");
         }
     }
 
-    /*
-      private class URLtoBitmap extends AsyncTask<Uri, Void, Bitmap> {
-          private static final String TAG = "URLtoBitmap";
-
-          @Override
-          protected Bitmap doInBackground(Uri... params) {
-              try {
-                  URL downloadurl = new URL(params.toString());
-                  return BitmapFactory.decodeStream(downloadurl.openConnection().getInputStream());
-
-              } catch (Exception e) {
-                  Log.i(TAG, "Could not get the bitmap");
-                  return null;
-              }
-
-          }
-
-          @Override
-          protected void onPostExecute(Bitmap result) {
-              if (result != null) {
-                  showimg.setImageBitmap(result);
-
-              } else Log.i(TAG, "Could not set the image");
-          }
-      } */
-    }
+}
 
 
 

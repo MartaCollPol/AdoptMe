@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button btn_prova = (Button)findViewById(R.id.btn_proves);
+        Button btn_info = (Button)findViewById(R.id.btn_info);
 
         signInAnonymously();
 
@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        btn_prova.setOnClickListener(new View.OnClickListener() {
+        btn_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showinfo(v);

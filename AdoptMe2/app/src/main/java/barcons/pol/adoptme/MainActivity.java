@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         btn_prova.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showinfo(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
         Intent intent = new Intent(this, InfoActivity.class);
-        String adid= "1"; //id de l'anunci "query de key de l'anunci clicat"
+        String adid= "-L0jyixqafS4T9GeOO8W"; //id de l'anunci "query de key de l'anunci clicat"
         intent.putExtra("ad",adid);
         startActivity(intent);
 

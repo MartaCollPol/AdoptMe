@@ -68,7 +68,7 @@ public class InfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String ad= intent.getStringExtra("ad"); // id de l'anunci
         //Obtenir els valors d'un anunci dins d'un object Ad per mostrar-ho.
-        ImgRef = StorageRef.child(ad +".jpg");
+        ImgRef = StorageRef.child(ad);
 
         //Col·loquem la imatge guardada al Firebase storage al imageView
         ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

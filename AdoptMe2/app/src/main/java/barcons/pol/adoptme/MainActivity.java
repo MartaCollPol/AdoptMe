@@ -12,11 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 //import per obtenir l'id unic del dispositiu
 
@@ -24,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Referència a les autentificacions del firebase
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private ArrayList<String> itemList;
+    private ListAdapter adapter;
 
+    private ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Button btn_info = (Button)findViewById(R.id.btn_info);
+        list = (ListView) findViewById(R.id.list);
+
+        itemList = new ArrayList<>();
+        itemList.add("gos");
+        itemList.add("gat");
+
+        adapter = new ListAdapter(
+                this,
+                R.layout.anunci,
+                itemList
+        );
+        list.setAdapter(adapter);
 
         signInAnonymously();
 

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ListAdapter adapter;
     StorageReference ImgRef;
-    ImageView showimg;
+
 
     private ListView list;
 
@@ -72,13 +72,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                 createAd(view);
-            }
-        });
-
-        btn_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showinfo(v);
             }
         });
 
@@ -127,13 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void showinfo(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
-        Intent intent = new Intent(this, InfoActivity.class);
-        String adid= "-L0jyixqafS4T9GeOO8W"; //id de l'anunci "query de key de l'anunci clicat"
-        intent.putExtra("ad",adid);
-        startActivity(intent);
 
-    }
 
     public void createAd(View view){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
         Intent intent = new Intent(this, CreaActivity.class);

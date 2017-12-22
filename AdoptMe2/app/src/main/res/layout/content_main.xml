@@ -38,8 +38,8 @@
 
     </android.support.design.widget.BottomNavigationView>
 
-    <Button
-        android:id="@+id/btn_info"
+  <!--  <Button
+        android:id="@+id/but_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -47,6 +47,6 @@
         android:layout_marginTop="214dp"
         android:text="Proves" />
 
-
+-->
 
 </RelativeLayout>

@@ -33,6 +33,7 @@
             android:layout_width="59dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:onClick="showinfo"
             android:text="i" />
 
         <LinearLayout

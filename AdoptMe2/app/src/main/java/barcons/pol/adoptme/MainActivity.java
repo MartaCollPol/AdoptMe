@@ -12,12 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -27,8 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Referència a les autentificacions del firebase
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private ArrayList<String> itemList;
     private ListAdapter adapter;
+    StorageReference ImgRef;
+    ImageView showimg;
 
     private ListView list;
 
@@ -41,14 +44,21 @@ public class MainActivity extends AppCompatActivity {
         Button btn_info = (Button)findViewById(R.id.btn_info);
         list = (ListView) findViewById(R.id.list);
 
-        itemList = new ArrayList<>();
-        itemList.add("gos");
-        itemList.add("gat");
+        String [] itemList ={
+                "gos"
+        };
+
+
+        String [] foto ={
+                "https://firebasestorage.googleapis.com/v0/b/adoptmeapp-1.appspot.com/o/2.jpg?alt=media&token=10157af4-a99f-4f67-aadc-a4e27eeb9a11"
+        };
+
 
         adapter = new ListAdapter(
                 this,
-                R.layout.anunci,
+                foto,
                 itemList
+
         );
         list.setAdapter(adapter);
 

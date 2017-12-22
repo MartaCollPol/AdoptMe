@@ -1,5 +1,6 @@
 package barcons.pol.adoptme;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -7,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -15,9 +20,15 @@ import java.util.List;
  */
 
 public class ListAdapter extends ArrayAdapter<String> {
+    private final Activity context;
+    private final String[] imatgeid;
+    private final String[] dist;
 
-    public ListAdapter(@NonNull Context context, int resource, List objects) {
-        super(context, resource, objects);
+    public ListAdapter(@NonNull Activity context, String[] imatgeid, String[] dist) {
+        super(context,R.layout.anunci, imatgeid);
+        this.context = context;
+        this.dist = dist;
+        this.imatgeid = imatgeid;
     }
 
     @Override
@@ -29,8 +40,11 @@ public class ListAdapter extends ArrayAdapter<String> {
         }
 
         CheckBox chk = (CheckBox) result.findViewById(R.id.chk_anunci);
-        String item_txt = getItem(position);
-        chk.setText(item_txt);
+        TextView txt = (TextView) result.findViewById(R.id.txt_anunci);
+        ImageView img = (ImageView) result.findViewById(R.id.img_anunci);
+        txt.setText(dist[position]);
+        Picasso.with(context).load(imatgeid[position]).into(img);
         return result;
     }
 }
+

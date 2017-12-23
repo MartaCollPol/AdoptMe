@@ -83,6 +83,7 @@ public class ListAdapter extends ArrayAdapter<String> {
     }
 
 
+
     private void showinfo(View view,int position){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
         //ctx = getContext();
         Intent intent = new Intent(context, InfoActivity.class);
@@ -108,6 +109,7 @@ public class ListAdapter extends ArrayAdapter<String> {
             else Log.i(TAG,"Could not set the image");
         }
     }
+
 }
 
 

@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button btn_info = (Button)findViewById(R.id.btn_info);
         list = (ListView) findViewById(R.id.list);
 
         //problema aqui ?

@@ -19,9 +19,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
+import barcons.pol.adoptme.Utils.FirebaseReferences;
+import barcons.pol.adoptme.Utils.ListAdapter;
 
 //import per obtenir l'id unic del dispositiu
 
@@ -29,9 +37,17 @@ public class MainActivity extends AppCompatActivity {
 
     //Referència a les autentificacions del firebase
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    //Referència al database
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+    //DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
+
+    private ArrayList<String> itemList;
     private ListAdapter adapter;
     StorageReference ImgRef;
-
+    ImageView showimg;
+    ArrayList<String> imgid = new ArrayList<>();
+    ArrayList<String> dist = new ArrayList<>();
 
     private ListView list;
 
@@ -44,20 +60,29 @@ public class MainActivity extends AppCompatActivity {
         Button btn_info = (Button)findViewById(R.id.btn_info);
         list = (ListView) findViewById(R.id.list);
 
-        String [] itemList ={
-                "gos"
-        };
+        //problema aqui ?
+        AdsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> ads= dataSnapshot.getChildren();
+                for (DataSnapshot ad: ads) {
+                    imgid.add(ad.getKey());
+                    dist.add("gos"); // aqui afagirem les distàncies amb ad.child(distancia).getValue();
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                    Log.i("Adlist","Failed on retrieving the adlist");
+            }
+        });
 
-        String [] foto ={
-                "https://firebasestorage.googleapis.com/v0/b/adoptmeapp-1.appspot.com/o/2.jpg?alt=media&token=10157af4-a99f-4f67-aadc-a4e27eeb9a11"
-        };
 
 
         adapter = new ListAdapter(
                 this,
-                foto,
-                itemList
+                imgid,
+                dist
 
         );
         list.setAdapter(adapter);

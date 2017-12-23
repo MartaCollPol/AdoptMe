@@ -126,7 +126,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     //Asynctask per descarregar la imatge des de l'url
-    private class DownloadImage extends AsyncTask<Uri, Void, String> {
+    public class DownloadImage extends AsyncTask<Uri, Void, String> {
         private static final String TAG = "DownloadImage";
         @Override
         protected String doInBackground(Uri... params) {

@@ -311,7 +311,7 @@ public class CreaActivity extends AppCompatActivity {
     }
 
     /*
-
+       afegir
     //Afegeix la imatge a la galeria del dispositiu - no furula perq per ara les imatges es guarden al directori
     //Retornat per getExternalFilesDir el qual el mediaScan no el llegeix ja que és privat per l'app
     private void galleryAddPic() {

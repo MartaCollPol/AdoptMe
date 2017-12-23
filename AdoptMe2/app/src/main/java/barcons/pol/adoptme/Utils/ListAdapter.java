@@ -1,40 +1,115 @@
 package barcons.pol.adoptme.Utils;
 
-import android.content.Context;
-import android.support.annotation.LayoutRes;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.List;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
+import barcons.pol.adoptme.InfoActivity;
 import barcons.pol.adoptme.R;
 
 /**
- * Created by alsina on 18/12/2017.
+ * Created by sense on 21/12/2017.
  */
 
 public class ListAdapter extends ArrayAdapter<String> {
-    public ListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List objects) {
-        super(context, resource, objects);
+    private final Activity context;
+    private final ArrayList<String> imatgeid;
+    private final ArrayList<String> dist;
+
+    StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
+    StorageReference ImgRef;
+
+    ImageView img;
+
+
+
+    public ListAdapter(@NonNull Activity context, ArrayList<String> imatgeid, ArrayList<String> dist) {
+        super(context, R.layout.anunci, imatgeid);
+        this.context = context;
+        this.dist = dist;
+        this.imatgeid = imatgeid;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View result = convertView;
-        if (result == null) {
+        if(result == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             result = inflater.inflate(R.layout.anunci, null);
         }
-        //  CheckBox checkbox = (CheckBox) result.findViewById(R.id.chk_anunci);
-        //  String item_text = getItem(position);
-        return result;
 
-        //  }
+        CheckBox chk = (CheckBox) result.findViewById(R.id.chk_anunci);
+        TextView txt = (TextView) result.findViewById(R.id.txt_anunci);
+        img = (ImageView) result.findViewById(R.id.img_anunci);
+        Button btn = (Button) result.findViewById(R.id.btn_info);
+
+
+        txt.setText(dist.get(position));
+        ImgRef = StorageRef.child(imatgeid.get(position));
+        ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //String url = uri.toString();
+                new DownloadImage().execute(uri);
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showinfo(v,position);
+            }
+        });
+
+        return result;
+    }
+
+
+    private void showinfo(View view,int position){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
+        //ctx = getContext();
+        Intent intent = new Intent(context, InfoActivity.class);
+        String adid= imatgeid.get(position); //id de l'anunci "query de key de l'anunci clicat"
+        intent.putExtra("ad",adid);
+        context.startActivity(intent);
+    }
+
+    //Asynctask per descarregar la imatge des de l'url
+    private class DownloadImage extends AsyncTask<Uri, Void, String> {
+        private static final String TAG = "DownloadImageMain";
+        @Override
+        protected String doInBackground(Uri... params) {
+            return params[0].toString();
+
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            if(result!=null){
+                Picasso.with(context).load(result).into(img);
+            }
+            else Log.i(TAG,"Could not set the image");
+        }
     }
 }
+
+
+
 

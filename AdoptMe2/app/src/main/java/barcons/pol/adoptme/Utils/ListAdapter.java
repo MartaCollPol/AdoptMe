@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ public class ListAdapter extends ArrayAdapter<String> {
         TextView txt = (TextView) result.findViewById(R.id.txt_anunci);
         img = (ImageView) result.findViewById(R.id.img_anunci);
         Button btn = (Button) result.findViewById(R.id.btn_info);
+
+
 
 
         txt.setText(dist.get(position));

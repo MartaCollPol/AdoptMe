@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         list = (ListView) findViewById(R.id.list);
 
+
         //problema aqui ?
         AdsRef.addValueEventListener(new ValueEventListener() {
             @Override

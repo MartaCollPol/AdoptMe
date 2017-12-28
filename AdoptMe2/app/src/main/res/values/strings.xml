@@ -15,4 +15,10 @@
     <string name="email">Email</string>
     <string name="action_OK">OK</string>
     <string name="action_filtra">Filtra</string>
+    <string name="femella">Femella</string>
+    <string name="localització">Localització</string>
+    <string name="min">min</string>
+    <string name="max">max</string>
+    <string name="guió">-</string>
+
 </resources>

@@ -37,9 +37,6 @@ public class FiltraActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
-
-
-
         }
         return true;
     }
@@ -71,7 +68,10 @@ public class FiltraActivity extends AppCompatActivity {
 
 
 
-        //Fem que només un dels checkbox estigui activat al mateix temps
+        //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
+        // Checkbox a que d'altres estiguin clicats prèviament
+        // (funcions whenchecked, whenchecked2 i whenchecked3)
+
         mascle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

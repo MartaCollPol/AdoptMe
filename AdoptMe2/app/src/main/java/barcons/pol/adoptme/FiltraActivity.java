@@ -55,6 +55,10 @@ public class FiltraActivity extends AppCompatActivity {
         femella = (CheckBox)findViewById(R.id.sexe_femella);
         desc = (CheckBox)findViewById(R.id.edat_desconegut);
 
+        desc.setEnabled(false);
+        mascle.setEnabled(false);
+        femella.setEnabled(false);
+
 
         //Fem que només un dels checkbox estigui activat al mateix temps
         mascle.setOnClickListener(new View.OnClickListener() {
@@ -72,17 +76,19 @@ public class FiltraActivity extends AppCompatActivity {
             }
         });
 
-        //Proves CheckBox
-        /*
-        desc.setOnClickListener(new View.OnClickListener() {
+        Edat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked2(desc,Edat);
-
+                whenchecked2(Edat,desc);
             }
-
         });
-       */
+
+        Sexe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whenchecked3(Sexe,mascle,femella);
+            }
+        });
 
 
     }
@@ -91,15 +97,37 @@ public class FiltraActivity extends AppCompatActivity {
         if (a.isChecked()) {
             b.setChecked(false);
         }
+
     }
 
-    //Proves CheckBox
-    /*
+
     private void whenchecked2(CheckBox a, CheckBox b) {
+
         if (a.isChecked()) {
-            b.setChecked(true);
+            b.setEnabled(true);
+        }
+
+        if (!(a.isChecked())){
+            b.setChecked(false);
+            b.setEnabled(false);
         }
     }
-    */
+
+
+    private void whenchecked3(CheckBox a, CheckBox b, CheckBox c) {
+
+        if (a.isChecked()) {
+            b.setEnabled(true);
+            c.setEnabled(true);
+        }
+
+        if (!(a.isChecked())){
+            b.setChecked(false);
+            b.setEnabled(false);
+            c.setChecked(false);
+            c.setEnabled(false);
+        }
+    }
+
 
 }

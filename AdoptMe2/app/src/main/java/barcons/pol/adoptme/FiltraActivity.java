@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 public class FiltraActivity extends AppCompatActivity {
 
@@ -16,6 +17,9 @@ public class FiltraActivity extends AppCompatActivity {
     CheckBox mascle;
     CheckBox femella;
     CheckBox desc;
+
+    EditText min;
+    EditText max;
 
     //Menú de la barra de dalt de Filtractivity
     @Override
@@ -32,9 +36,6 @@ public class FiltraActivity extends AppCompatActivity {
             case android.R.id.home:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-
-
-
 
         }
         return true;
@@ -55,8 +56,22 @@ public class FiltraActivity extends AppCompatActivity {
         femella = (CheckBox)findViewById(R.id.sexe_femella);
         desc = (CheckBox)findViewById(R.id.edat_desconegut);
 
+        min = (EditText) findViewById(R.id.edit_min);
+        max = (EditText) findViewById(R.id.edit_max);
 
-        //Fem que només un dels checkbox estigui activat al mateix temps
+        desc.setEnabled(false);
+        mascle.setEnabled(false);
+        femella.setEnabled(false);
+
+        min.setEnabled(false);
+        max.setEnabled(false);
+
+
+
+        //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
+        // Checkbox a que d'altres estiguin clicats prèviament
+        // (funcions whenchecked, whenchecked2 i whenchecked3)
+
         mascle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,17 +87,19 @@ public class FiltraActivity extends AppCompatActivity {
             }
         });
 
-        //Proves CheckBox
-        /*
-        desc.setOnClickListener(new View.OnClickListener() {
+        Edat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked2(desc,Edat);
-
+                whenchecked2(Edat,desc);
             }
-
         });
-       */
+
+        Sexe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whenchecked3(Sexe,mascle,femella);
+            }
+        });
 
 
     }
@@ -91,15 +108,43 @@ public class FiltraActivity extends AppCompatActivity {
         if (a.isChecked()) {
             b.setChecked(false);
         }
+
     }
 
-    //Proves CheckBox
-    /*
+
     private void whenchecked2(CheckBox a, CheckBox b) {
+
         if (a.isChecked()) {
-            b.setChecked(true);
+            b.setEnabled(true);
+            min.setEnabled(true);
+            max.setEnabled(true);
+        }
+
+        if (!(a.isChecked())){
+            b.setChecked(false);
+            b.setEnabled(false);
+            min.setEnabled(false);
+            max.setEnabled(false);
+            min.setText(" ");
+            max.setText(" ");
         }
     }
-    */
+
+
+    private void whenchecked3(CheckBox a, CheckBox b, CheckBox c) {
+
+        if (a.isChecked()) {
+            b.setEnabled(true);
+            c.setEnabled(true);
+        }
+
+        if (!(a.isChecked())){
+            b.setChecked(false);
+            b.setEnabled(false);
+            c.setChecked(false);
+            c.setEnabled(false);
+        }
+    }
+
 
 }

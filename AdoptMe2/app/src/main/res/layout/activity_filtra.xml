@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="40sp"
         android:layout_marginTop="40sp"
-        android:text="Localització"
+        android:text="@string/localització"
         android:textSize="24sp" />
 
     <CheckBox
@@ -26,7 +26,7 @@
         android:layout_alignStart="@+id/filtra_loc"
         android:layout_below="@+id/filtra_loc"
         android:layout_marginTop="89dp"
-        android:text="Edat"
+        android:text="@string/edat"
         android:textSize="24sp" />
 
     <CheckBox
@@ -37,7 +37,7 @@
         android:layout_alignStart="@+id/filtra_edat"
         android:layout_below="@+id/filtra_edat"
         android:layout_marginTop="132dp"
-        android:text="Sexe"
+        android:text="@string/sexe"
         android:textSize="24sp" />
 
     <CheckBox
@@ -50,7 +50,7 @@
         android:layout_marginEnd="17dp"
         android:layout_marginRight="17dp"
         android:layout_marginTop="13dp"
-        android:text="Mascle"
+        android:text="@string/mascle"
         android:textSize="18sp" />
 
     <CheckBox
@@ -60,7 +60,7 @@
         android:layout_alignLeft="@+id/sexe_mascle"
         android:layout_alignStart="@+id/sexe_mascle"
         android:layout_below="@+id/sexe_mascle"
-        android:text="Femella"
+        android:text="@string/femella"
         android:textSize="18sp" />
 
     <TextView
@@ -72,7 +72,7 @@
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/filtra_edat"
         android:layout_toRightOf="@+id/filtra_edat"
-        android:text="min"
+        android:text="@string/min"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp" />
 
@@ -86,7 +86,7 @@
         android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/edit_max"
         android:layout_toRightOf="@+id/edit_max"
-        android:text="max"
+        android:text="@string/max"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp" />
 
@@ -122,7 +122,7 @@
         android:layout_marginStart="14dp"
         android:layout_toEndOf="@+id/edit_min"
         android:layout_toRightOf="@+id/edit_min"
-        android:text="--"
+        android:text="@string/guió"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="30sp" />
 
@@ -134,7 +134,7 @@
         android:layout_alignStart="@+id/edat_min"
         android:layout_below="@+id/edit_min"
         android:layout_marginTop="11dp"
-        android:text="Desconegut"
+        android:text="@string/desconegut"
         android:textSize="18sp" />
 
 </RelativeLayout>

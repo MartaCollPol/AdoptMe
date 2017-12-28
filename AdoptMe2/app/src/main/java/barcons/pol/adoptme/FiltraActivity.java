@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 public class FiltraActivity extends AppCompatActivity {
 
@@ -16,6 +17,9 @@ public class FiltraActivity extends AppCompatActivity {
     CheckBox mascle;
     CheckBox femella;
     CheckBox desc;
+
+    EditText min;
+    EditText max;
 
     //Menú de la barra de dalt de Filtractivity
     @Override
@@ -55,9 +59,16 @@ public class FiltraActivity extends AppCompatActivity {
         femella = (CheckBox)findViewById(R.id.sexe_femella);
         desc = (CheckBox)findViewById(R.id.edat_desconegut);
 
+        min = (EditText) findViewById(R.id.edit_min);
+        max = (EditText) findViewById(R.id.edit_max);
+
         desc.setEnabled(false);
         mascle.setEnabled(false);
         femella.setEnabled(false);
+
+        min.setEnabled(false);
+        max.setEnabled(false);
+
 
 
         //Fem que només un dels checkbox estigui activat al mateix temps
@@ -105,11 +116,17 @@ public class FiltraActivity extends AppCompatActivity {
 
         if (a.isChecked()) {
             b.setEnabled(true);
+            min.setEnabled(true);
+            max.setEnabled(true);
         }
 
         if (!(a.isChecked())){
             b.setChecked(false);
             b.setEnabled(false);
+            min.setEnabled(false);
+            max.setEnabled(false);
+            min.setText(" ");
+            max.setText(" ");
         }
     }
 

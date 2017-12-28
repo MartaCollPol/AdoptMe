@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,10 +46,38 @@ public class InfoActivity extends AppCompatActivity {
 
     ImageView showimg;
 
+
+    //Menú de la barra de dalt de InfoActivity
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        return true;
+    }
+
+    //Opcions que hi haura a la barra de dalt
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+
+
+
+
+        }
+        return true;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_activity);
+
+        //Per que aparegui el botó de BACK a la barra de dalt
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView text_desc = (TextView)findViewById(R.id.i_text_descripcio);
         final TextView text_edat = (TextView)findViewById(R.id.i_text_edat);

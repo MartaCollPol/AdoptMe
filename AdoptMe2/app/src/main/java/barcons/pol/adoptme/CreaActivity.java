@@ -116,6 +116,7 @@ public class CreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea);
 
+        //Perquè aparegui el botó de BACK a la barra de dalt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

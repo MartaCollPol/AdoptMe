@@ -1,5 +1,6 @@
 package barcons.pol.adoptme;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -87,8 +88,14 @@ public class CreaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+
             case R.id.action_OK:
                 CreaAnunci();
+
 
         }
         return true;
@@ -109,6 +116,7 @@ public class CreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         text_desc = (EditText) findViewById(R.id.c_text_descripcio);
@@ -200,6 +208,8 @@ public class CreaActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     //Creem l'anunci
     private void CreaAnunci(){

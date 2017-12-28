@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -94,7 +95,22 @@ public class CreaActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_OK:
-                CreaAnunci();
+                boolean flag = false;
+                if(!Uri.EMPTY.equals("...")){
+                    flag = true;
+                    Toast.makeText(this, "Falta la imatge!", Toast.LENGTH_SHORT).show();
+
+                }if(text_desc.getText().toString().trim().equals("")) {
+                    flag = true;
+                    text_desc.setError("Camp incomplet");
+                }if(desconegut.isChecked()==false){
+                    flag = true;
+                    desconegut.setError("Camp incomplet");
+            }
+            if(flag == false){
+                    CreaAnunci();
+                }
+
 
 
         }

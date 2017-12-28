@@ -109,6 +109,8 @@ public class CreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea);
 
+
+
         text_desc = (EditText) findViewById(R.id.c_text_descripcio);
         text_edat = (EditText) findViewById(R.id.c_text_edat);
         text_nom = (EditText)findViewById(R.id.c_text_nom);

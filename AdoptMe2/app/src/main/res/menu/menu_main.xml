@@ -4,7 +4,7 @@
     tools:context="barcons.pol.adoptme.MainActivity">
     <item
         android:id="@+id/action_filtra"
-        android:icon="@drawable/ic_arrow_down"
+        android:icon="@drawable/ic_arrowdown"
         android:title="@string/action_filtra"
         app:showAsAction="always"
 

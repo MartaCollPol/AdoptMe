@@ -102,10 +102,22 @@ public class CreaActivity extends AppCompatActivity {
 
                 }if(text_desc.getText().toString().trim().equals("")) {
                     flag = true;
-                    text_desc.setError("Camp incomplet");
+                    text_desc.setError("");
                 }if(desconegut.isChecked()==false){
                     flag = true;
-                    desconegut.setError("Camp incomplet");
+                    desconegut.setError("");
+                }if(text_nom.getText().toString().trim().equals("")){
+                    flag = true;
+                    text_nom.setError("");
+                }if(text_email.getText().toString().trim().equals("")){
+                    flag = true;
+                    text_email.setError("");
+                }if(text_telf.getText().toString().trim().equals("")){
+                    flag = true;
+                    text_telf.setError("");
+            }if((female.isChecked()==false)&&(male.isChecked()==false)){
+                flag = true;
+                female.setError("");
             }
             if(flag == false){
                     CreaAnunci();

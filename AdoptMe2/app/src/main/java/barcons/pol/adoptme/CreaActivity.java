@@ -96,26 +96,35 @@ public class CreaActivity extends AppCompatActivity {
 
             case R.id.action_OK:
                 boolean flag = false;
-                if(!Uri.EMPTY.equals("...")){
+                if(!Uri.EMPTY.equals("")){
                     flag = true;
                     Toast.makeText(this, "Falta la imatge!", Toast.LENGTH_SHORT).show();
 
-                }if(text_desc.getText().toString().trim().equals("")) {
+                }if(text_desc.getText().toString().trim().equals("...")) {
                     flag = true;
-                    text_desc.setError("");
-                }if(desconegut.isChecked()==false){
+                    text_desc.requestFocus();
+                    text_desc.setError("Falten els camps assenyalats!");
+                }if((desconegut.isChecked())||!(text_edat.getText().toString().trim().equals(""))) {
+                desconegut.setError(null);
+                }else{
                     flag = true;
+                    desconegut.requestFocus();
                     desconegut.setError("");
                 }if(text_nom.getText().toString().trim().equals("")){
                     flag = true;
+                    text_nom.requestFocus();
                     text_nom.setError("");
                 }if(text_email.getText().toString().trim().equals("")){
                     flag = true;
+                    text_email.requestFocus();
                     text_email.setError("");
                 }if(text_telf.getText().toString().trim().equals("")){
                     flag = true;
-                    text_telf.setError("");
-            }if((female.isChecked()==false)&&(male.isChecked()==false)){
+                    text_telf.requestFocus();
+                    text_telf.setError("Falten els camps assenyalats!");
+            }if((female.isChecked())||(male.isChecked())) {
+                female.setError(null);
+            }else{
                 flag = true;
                 female.setError("");
             }

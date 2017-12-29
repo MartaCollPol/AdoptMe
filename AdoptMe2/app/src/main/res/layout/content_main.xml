@@ -38,15 +38,17 @@
 
     </android.support.design.widget.BottomNavigationView>
 
-  <!--  <Button
-        android:id="@+id/but_info"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/list"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="214dp"
-        android:text="Proves" />
-
--->
+        android:layout_marginBottom="11dp"
+        android:fontFamily="serif"
+        android:text="AdoptMe"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

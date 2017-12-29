@@ -28,7 +28,7 @@ public class FiltraActivity extends AppCompatActivity {
         return true;
     }
 
-    //Opcions que hi haura a la barra de dalt
+    //Opcions que hi haura a la barra de dalt de FiltraActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

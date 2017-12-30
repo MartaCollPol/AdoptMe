@@ -36,6 +36,8 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:design:25.1.1'
+    //Add SeekBar multiple
+    compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
 
     testCompile 'junit:junit:4.12'
 }
@@ -43,4 +45,4 @@ dependencies {
 //firebase
 apply plugin: 'com.google.gms.google-services'
 
-//Add Library -Bar Navigator
+

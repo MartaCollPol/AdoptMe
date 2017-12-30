@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:rsb="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -63,34 +63,40 @@
         android:text="@string/femella"
         android:textSize="18sp" />
 
-    <SeekBar
-        android:id="@+id/seekBar2"
-        android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="54dp"
-        android:layout_below="@+id/filtra_loc"
-        android:layout_marginTop="37dp" />
-
     <CheckBox
         android:id="@+id/edat_desconegut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/seekBar2"
-        android:layout_alignStart="@+id/seekBar2"
-        android:layout_below="@+id/seekBar"
+        android:layout_alignLeft="@+id/loc_bar"
+        android:layout_alignStart="@+id/loc_bar"
+        android:layout_below="@+id/edat_bar"
         android:layout_marginTop="24dp"
         android:text="@string/desconegut"
         android:textSize="18sp" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="wrap_content"
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/edat_bar"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/seekBar2"
-        android:layout_alignLeft="@+id/seekBar2"
-        android:layout_alignRight="@+id/seekBar2"
-        android:layout_alignStart="@+id/seekBar2"
+        android:layout_alignEnd="@+id/loc_bar"
+        android:layout_alignLeft="@+id/loc_bar"
+        android:layout_alignRight="@+id/loc_bar"
+        android:layout_alignStart="@+id/loc_bar"
         android:layout_below="@+id/filtra_edat"
-        android:layout_marginTop="31dp" />
+        rsb:absoluteMaxValue="20"
+        rsb:absoluteMinValue="1"/>
+
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/loc_bar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="54dp"
+        android:layout_below="@+id/filtra_loc"
+        android:layout_marginTop="8dp"
+        rsb:absoluteMaxValue="10"
+        rsb:absoluteMinValue="1"
+        rsb:singleThumb="true"/>
+
+
 
 </RelativeLayout>

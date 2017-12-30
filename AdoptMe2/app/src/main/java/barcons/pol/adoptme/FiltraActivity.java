@@ -7,19 +7,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
+
+import org.florescu.android.rangeseekbar.RangeSeekBar;
+
 
 public class FiltraActivity extends AppCompatActivity {
 
-    CheckBox Localització;
+    CheckBox loc;
     CheckBox Sexe;
     CheckBox Edat;
     CheckBox mascle;
     CheckBox femella;
     CheckBox desc;
-
-    EditText min;
-    EditText max;
+    RangeSeekBar loc_bar;
+    RangeSeekBar edat_bar;
 
     //Menú de la barra de dalt de Filtractivity
     @Override
@@ -46,26 +47,32 @@ public class FiltraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtra);
 
+        // Setup the new range seek bar
+        RangeSeekBar<Integer> rangeSeekBar = new RangeSeekBar<>(this);
+        // Set the range
+        rangeSeekBar.setRangeValues(15, 90);
+        rangeSeekBar.setSelectedMinValue(20);
+        rangeSeekBar.setSelectedMaxValue(88);
+
+        // Seek bar for which we will set text color in code
+        loc_bar = (RangeSeekBar) findViewById(R.id.loc_bar);
+        edat_bar = (RangeSeekBar) findViewById(R.id.edat_bar);
+        loc_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
+        edat_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
+
         //Per que aparegui el botó de BACK a la barra de dalt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Localització = (CheckBox)findViewById(R.id.filtra_loc);
+        loc = (CheckBox)findViewById(R.id.filtra_loc);
         Edat = (CheckBox)findViewById(R.id.filtra_edat);
         Sexe = (CheckBox)findViewById(R.id.filtra_sexe);
         mascle = (CheckBox)findViewById(R.id.sexe_mascle);
         femella = (CheckBox)findViewById(R.id.sexe_femella);
         desc = (CheckBox)findViewById(R.id.edat_desconegut);
 
-        min = (EditText) findViewById(R.id.edit_min);
-        max = (EditText) findViewById(R.id.edit_max);
-
         desc.setEnabled(false);
         mascle.setEnabled(false);
         femella.setEnabled(false);
-
-        min.setEnabled(false);
-        max.setEnabled(false);
-
 
 
         //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
@@ -87,17 +94,22 @@ public class FiltraActivity extends AppCompatActivity {
             }
         });
 
-        Edat.setOnClickListener(new View.OnClickListener() {
+       Edat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whenchecked2(Edat,desc);
             }
         });
-
-        Sexe.setOnClickListener(new View.OnClickListener() {
+       Sexe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whenchecked3(Sexe,mascle,femella);
+            }
+       });
+        loc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whenchecked4(loc);
             }
         });
 
@@ -112,21 +124,18 @@ public class FiltraActivity extends AppCompatActivity {
     }
 
 
+
     private void whenchecked2(CheckBox a, CheckBox b) {
 
         if (a.isChecked()) {
             b.setEnabled(true);
-            min.setEnabled(true);
-            max.setEnabled(true);
+            loc_bar.setEnabled(true);
         }
 
         if (!(a.isChecked())){
             b.setChecked(false);
             b.setEnabled(false);
-            min.setEnabled(false);
-            max.setEnabled(false);
-            min.setText(" ");
-            max.setText(" ");
+            loc_bar.setEnabled(false);
         }
     }
 
@@ -143,6 +152,17 @@ public class FiltraActivity extends AppCompatActivity {
             b.setEnabled(false);
             c.setChecked(false);
             c.setEnabled(false);
+        }
+    }
+
+    private void whenchecked4(CheckBox a) {
+
+        if (a.isChecked()) {
+            loc_bar.setEnabled(true);
+        }
+
+        if (!(a.isChecked())){
+            loc_bar.setEnabled(false);
         }
     }
 

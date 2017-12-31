@@ -61,7 +61,6 @@ public class CreaActivity extends AppCompatActivity {
     //Objectes per facilitar la lectura del contingut de la base de dades
     Ad anunci=new Ad(); //invoquem el constructor per defecte
     User usuari=new User();
-
     EditText text_desc;
     EditText text_edat;
     EditText text_nom;

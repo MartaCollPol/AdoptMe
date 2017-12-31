@@ -73,6 +73,8 @@ public class FiltraActivity extends AppCompatActivity {
         desc.setEnabled(false);
         mascle.setEnabled(false);
         femella.setEnabled(false);
+        loc_bar.setEnabled(false);
+        edat_bar.setEnabled(false);
 
 
         //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
@@ -129,13 +131,16 @@ public class FiltraActivity extends AppCompatActivity {
 
         if (a.isChecked()) {
             b.setEnabled(true);
-            loc_bar.setEnabled(true);
+            edat_bar.setEnabled(true);
+
         }
 
         if (!(a.isChecked())){
             b.setChecked(false);
             b.setEnabled(false);
-            loc_bar.setEnabled(false);
+            edat_bar.setEnabled(false);
+            edat_bar.resetSelectedValues();
+
         }
     }
 
@@ -159,10 +164,14 @@ public class FiltraActivity extends AppCompatActivity {
 
         if (a.isChecked()) {
             loc_bar.setEnabled(true);
+
         }
 
         if (!(a.isChecked())){
             loc_bar.setEnabled(false);
+            loc_bar.resetSelectedValues();
+
+
         }
     }
 

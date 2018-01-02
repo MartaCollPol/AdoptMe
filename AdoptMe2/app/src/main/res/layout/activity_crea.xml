@@ -43,9 +43,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/email"
                 android:layout_alignBottom="@+id/email"
-                android:layout_alignEnd="@+id/c_text_telefon"
+                android:layout_alignEnd="@+id/c_check_desconegut"
                 android:layout_alignLeft="@+id/c_text_telefon"
-                android:layout_alignRight="@+id/c_text_telefon"
+                android:layout_alignRight="@+id/c_check_desconegut"
                 android:layout_alignStart="@+id/c_text_telefon"
                 android:textSize="18sp" />
 
@@ -53,13 +53,14 @@
                 android:id="@+id/c_text_telefon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/telefon"
+                android:layout_alignBottom="@+id/telefon"
+                android:layout_alignEnd="@+id/c_text_nom"
                 android:layout_alignLeft="@+id/c_text_nom"
-                android:layout_alignStart="@+id/c_text_nom"
-                android:layout_alignTop="@+id/telefon"
-                android:inputType="phone"
-                android:textSize="18sp"
                 android:layout_alignRight="@+id/c_text_nom"
-                android:layout_alignEnd="@+id/c_text_nom" />
+                android:layout_alignStart="@+id/c_text_nom"
+                android:inputType="phone"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/telefon"
@@ -80,31 +81,31 @@
                 android:layout_alignBottom="@+id/nom"
                 android:layout_alignLeft="@+id/c_check_male"
                 android:layout_alignStart="@+id/c_check_male"
-                android:textSize="18sp"
                 android:layout_toLeftOf="@+id/c_check_female"
-                android:layout_toStartOf="@+id/c_check_female" />
+                android:layout_toStartOf="@+id/c_check_female"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/nom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/contacte"
+                android:layout_alignStart="@+id/contacte"
+                android:layout_below="@+id/contacte"
                 android:layout_marginTop="38dp"
                 android:text="@string/nom"
-                android:textSize="18sp"
-                android:layout_below="@+id/contacte"
-                android:layout_alignLeft="@+id/contacte"
-                android:layout_alignStart="@+id/contacte" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/contacte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/contacte"
-                android:textSize="24sp"
-                android:layout_below="@+id/c_check_male"
                 android:layout_alignLeft="@+id/sexe"
                 android:layout_alignStart="@+id/sexe"
-                android:layout_marginTop="27dp" />
+                android:layout_below="@+id/c_check_male"
+                android:layout_marginTop="27dp"
+                android:text="@string/contacte"
+                android:textSize="24sp" />
 
             <CheckBox
                 android:id="@+id/c_check_female"
@@ -116,8 +117,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="17dp"
                 android:layout_marginRight="17dp"
-                android:text="@string/famella"
-                />
+                android:text="@string/famella" />
 
 
             <ImageView
@@ -143,22 +143,20 @@
 
             <EditText
                 android:id="@+id/c_text_edat"
-                android:layout_width="wrap_content"
+                android:layout_width="39dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/c_check_desconegut"
-                android:inputType="number"
-                android:textSize="24sp"
-                android:layout_alignRight="@+id/c_check_male"
+                android:layout_alignBottom="@+id/c_check_desconegut"
                 android:layout_alignEnd="@+id/c_check_male"
-                android:layout_toRightOf="@+id/anys"
-                android:layout_toEndOf="@+id/anys" />
+                android:layout_alignRight="@+id/c_check_male"
+                android:inputType="number"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/anys"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/c_text_edat"
-                android:layout_alignBottom="@+id/c_text_edat"
+                android:layout_alignBaseline="@+id/c_check_desconegut"
+                android:layout_alignBottom="@+id/c_check_desconegut"
                 android:layout_alignLeft="@+id/c_text_descripcio"
                 android:layout_alignStart="@+id/c_text_descripcio"
                 android:text="@string/anys"
@@ -192,14 +190,14 @@
                 android:id="@+id/descripcio"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/c_edit_image"
                 android:layout_marginLeft="18dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="18dp"
                 android:text="@string/descripcio"
-                android:textSize="18sp"
-                android:layout_below="@+id/c_edit_image"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:textSize="18sp" />
 
             <CheckBox
                 android:id="@+id/c_check_desconegut"
@@ -208,9 +206,8 @@
                 android:layout_alignEnd="@+id/c_text_descripcio"
                 android:layout_alignRight="@+id/c_text_descripcio"
                 android:layout_below="@+id/c_text_descripcio"
-                android:layout_marginTop="42dp"
-                android:text="@string/desconegut"
-                />
+                android:layout_marginTop="66dp"
+                android:text="@string/desconegut" />
 
             <CheckBox
                 android:id="@+id/c_check_male"
@@ -220,8 +217,7 @@
                 android:layout_alignBottom="@+id/sexe"
                 android:layout_alignLeft="@+id/anys"
                 android:layout_alignStart="@+id/anys"
-                android:text="@string/mascle"
-                />
+                android:text="@string/mascle" />
         </RelativeLayout>
     </ScrollView>
 

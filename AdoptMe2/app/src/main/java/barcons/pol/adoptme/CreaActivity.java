@@ -1,6 +1,5 @@
 package barcons.pol.adoptme;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -76,6 +75,7 @@ public class CreaActivity extends AppCompatActivity {
     String us;
     static String adkey;
     Uri uri;
+    Boolean ImgLoaded = false;
 
     //Menú de la barra de dalt de CreaActivity, on hi posarem el botó de OK
     @Override
@@ -95,14 +95,14 @@ public class CreaActivity extends AppCompatActivity {
 
             case R.id.action_OK:
                 boolean flag = false;
-                if(!Uri.EMPTY.equals("")){
+                if(!ImgLoaded){
                     flag = true;
-                    Toast.makeText(this, "Falta la imatge!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.missingimg, Toast.LENGTH_LONG).show();
 
-                }if(text_desc.getText().toString().trim().equals("...")) {
+                }if(text_desc.getText().toString().trim().equals("...") || text_desc.getText().toString().trim().equals("...")) {
                     flag = true;
                     text_desc.requestFocus();
-                    text_desc.setError("Falten els camps assenyalats!");
+                    text_desc.setError(getString(R.string.omple));
                 }if((desconegut.isChecked())||!(text_edat.getText().toString().trim().equals(""))) {
                 desconegut.setError(null);
                 }else{
@@ -112,15 +112,15 @@ public class CreaActivity extends AppCompatActivity {
                 }if(text_nom.getText().toString().trim().equals("")){
                     flag = true;
                     text_nom.requestFocus();
-                    text_nom.setError("");
+                    text_nom.setError(getString(R.string.omple));
                 }if(text_email.getText().toString().trim().equals("")){
                     flag = true;
                     text_email.requestFocus();
-                    text_email.setError("");
+                    text_email.setError(getString(R.string.omple));
                 }if(text_telf.getText().toString().trim().equals("")){
                     flag = true;
                     text_telf.requestFocus();
-                    text_telf.setError("Falten els camps assenyalats!");
+                    text_telf.setError(getString(R.string.omple));
             }if((female.isChecked())||(male.isChecked())) {
                 female.setError(null);
             }else{
@@ -253,7 +253,7 @@ public class CreaActivity extends AppCompatActivity {
         anunci.user = us;
         if (female.isChecked()) {
             anunci.sexe = "female";
-        } else anunci.sexe = "mascle";
+        } else anunci.sexe = "male";
         //Per a numeros '-1' serà l'equivalent al valor 'null'
         String edat = text_edat.getText().toString();
         if (edat.equals("")) {
@@ -332,6 +332,7 @@ public class CreaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             imageView.setImageURI(uri);
+            ImgLoaded = true;
         }
     }
 

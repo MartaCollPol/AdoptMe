@@ -17,6 +17,7 @@
         android:layout_gravity="start"
         android:textSize="18sp" />
 
+    <!-- canviar layout width a 400dp si hi han problemes -->
     <ImageView
         android:id="@+id/img_anunci"
         android:layout_width="match_parent"

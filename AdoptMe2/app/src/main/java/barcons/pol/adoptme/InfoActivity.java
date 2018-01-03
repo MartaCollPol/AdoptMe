@@ -126,13 +126,17 @@ public class InfoActivity extends AppCompatActivity {
                         //omplim els texts views corresponents "falten les comprovacions de si mascle
                         // esta checked famella no i el mateix amb l'edat.
                         text_desc.setText(anunci.desc);
-                        text_edat.setText(String.valueOf(anunci.edat.known));
                         desconegut.setChecked(anunci.edat.unknown);
                         famella.setChecked(anunci.sexe.equals("female"));
-                        mascle.setChecked(anunci.sexe.equals("mascle"));
+                        mascle.setChecked(anunci.sexe.equals("male"));
                         text_nom.setText(usuari.name);
                         text_email.setText(usuari.email);
                         text_telf.setText(String.valueOf(usuari.phone));
+
+                        String auxedat = String.valueOf(anunci.edat.known);
+                        if (auxedat=="-1") {
+                            text_edat.setText("-");
+                        }else{text_edat.setText(auxedat);}
 
                     }
 

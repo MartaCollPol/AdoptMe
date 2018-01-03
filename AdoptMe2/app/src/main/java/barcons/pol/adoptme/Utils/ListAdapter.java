@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,7 +87,6 @@ public class ListAdapter extends ArrayAdapter<String> {
 
 
     private void showinfo(View view,int position){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
-        //ctx = getContext();
         Intent intent = new Intent(context, InfoActivity.class);
         String adid= imatgeid.get(position); //id de l'anunci "query de key de l'anunci clicat"
         intent.putExtra("ad",adid);

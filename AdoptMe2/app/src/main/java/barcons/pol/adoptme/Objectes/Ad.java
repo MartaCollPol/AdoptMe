@@ -10,7 +10,6 @@ public class Ad {
     public String sexe;
     public edat edat;
     public String desc;
-    public String url;
 
 
 
@@ -19,10 +18,9 @@ public class Ad {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Ad(String userid,int edatknown,boolean edatunknown, String sexe,String descripcio, String url) {
+    public Ad(String userid,int edatknown,boolean edatunknown, String sexe,String descripcio) {
         this.user = userid;
         this.desc = descripcio;
-        this.url = url;
         this.edat = new edat(edatknown,edatunknown);
         this.sexe = sexe;
 

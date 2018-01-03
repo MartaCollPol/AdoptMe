@@ -83,8 +83,8 @@
         android:layout_alignRight="@+id/loc_bar"
         android:layout_alignStart="@+id/loc_bar"
         android:layout_below="@+id/filtra_edat"
-        rsb:absoluteMaxValue="20"
-        rsb:absoluteMinValue="1"/>
+        rsb:absoluteMaxValue="1"
+        rsb:absoluteMinValue="20"/>
 
     <org.florescu.android.rangeseekbar.RangeSeekBar
         android:id="@+id/loc_bar"
@@ -93,8 +93,8 @@
         android:layout_marginLeft="54dp"
         android:layout_below="@+id/filtra_loc"
         android:layout_marginTop="8dp"
-        rsb:absoluteMaxValue="10"
-        rsb:absoluteMinValue="1"
+        rsb:absoluteMaxValue="1"
+        rsb:absoluteMinValue="10"
         rsb:singleThumb="true"/>
 
 

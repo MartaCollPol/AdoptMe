@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -18,7 +20,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,6 +59,7 @@ public class CreaActivity extends AppCompatActivity {
     DatabaseReference CreatedRef;
 
     //Objectes per facilitar la lectura del contingut de la base de dades
+    CoordinatorLayout coordinatorLayout;
     Ad anunci=new Ad(); //invoquem el constructor per defecte
     User usuari=new User();
     EditText text_desc;
@@ -97,7 +99,8 @@ public class CreaActivity extends AppCompatActivity {
                 boolean flag = false;
                 if(!ImgLoaded){
                     flag = true;
-                    Toast.makeText(this, R.string.missingimg, Toast.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, R.string.missingimg, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
 
                 }if(text_desc.getText().toString().trim().equals("...") || text_desc.getText().toString().trim().equals("...")) {
                     flag = true;
@@ -155,7 +158,7 @@ public class CreaActivity extends AppCompatActivity {
         //Perquè aparegui el botó de BACK a la barra de dalt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        coordinatorLayout =(CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         text_desc = (EditText) findViewById(R.id.c_text_descripcio);
         text_edat = (EditText) findViewById(R.id.c_text_edat);
         text_nom = (EditText)findViewById(R.id.c_text_nom);
@@ -310,7 +313,7 @@ public class CreaActivity extends AppCompatActivity {
 
 
     //INTENT DE CÀMERA
-    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_TAKE_PHOTO = 110;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent

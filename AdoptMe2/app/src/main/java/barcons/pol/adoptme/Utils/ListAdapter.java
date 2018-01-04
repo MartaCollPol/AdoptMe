@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -36,6 +38,8 @@ public class ListAdapter extends ArrayAdapter<String> {
 
     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
     StorageReference ImgRef;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
 
     ImageView img;
 
@@ -61,7 +65,13 @@ public class ListAdapter extends ArrayAdapter<String> {
         img = (ImageView) result.findViewById(R.id.img_anunci);
         Button btn = (Button) result.findViewById(R.id.btn_info);
 
-
+        chk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO:trobar el current user i assignarli l'anunci al child saved
+                //https://developer.android.com/training/articles/user-data-ids.html
+            }
+        });
 
 
         txt.setText(dist.get(position));
@@ -69,7 +79,6 @@ public class ListAdapter extends ArrayAdapter<String> {
         ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                //String url = uri.toString();
                 new DownloadImage().execute(uri);
             }
         });
@@ -86,7 +95,7 @@ public class ListAdapter extends ArrayAdapter<String> {
 
 
 
-    private void showinfo(View view,int position){ //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
+    private void showinfo(View view,int position){
         Intent intent = new Intent(context, InfoActivity.class);
         String adid= imatgeid.get(position); //id de l'anunci "query de key de l'anunci clicat"
         intent.putExtra("ad",adid);

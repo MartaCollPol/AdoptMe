@@ -92,9 +92,6 @@ public class InfoActivity extends AppCompatActivity {
 
         StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
 
-
-
-
         Intent intent = getIntent();
         String ad= intent.getStringExtra("ad"); // id de l'anunci
         //Obtenir els valors d'un anunci dins d'un object Ad per mostrar-ho.

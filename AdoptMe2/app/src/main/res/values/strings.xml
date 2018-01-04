@@ -18,6 +18,7 @@
     <string name="localització">Location</string>
     <string name="omple">Fill the missing fields</string>
     <string name="missingimg">The image is missing</string>
+    <string name="usrnotfound">User not found</string>
     <string name="adoptme">Adopt Me</string>
     <string name="cognom">Surname</string>
     <string name="ok">OK</string>

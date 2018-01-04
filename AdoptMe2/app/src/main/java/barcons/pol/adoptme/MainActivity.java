@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,6 +192,9 @@ public class MainActivity extends AppCompatActivity {
                     GetUser(view);
                 }
             });
+
+
+
 
         } else finish();
     }
@@ -210,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("mcoll","User exists");
                     for(DataSnapshot uid: dataSnapshot.getChildren()){
                         UserId = uid.getKey();
-                        Log.e("mcoll",UserId);
+                        Log.e("mcoll","value:"+UserId);
                         createAd(view, UserId);
                     }
 

@@ -36,7 +36,7 @@ public class GetDeviceId {
                 throw new AssertionError();}
             else {
                 String deviceId = telephonyManager.getDeviceId();
-                Log.e("mcoll", deviceId);
+                Log.e("mcoll", "value:"+deviceId);
                 return deviceId;
             }
         }else return null;

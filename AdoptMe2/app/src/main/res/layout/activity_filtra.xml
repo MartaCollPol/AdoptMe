@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="barcons.pol.adoptme.FiltraActivity">
 
+
     <CheckBox
         android:id="@+id/filtra_loc"
         android:layout_width="wrap_content"
@@ -93,7 +94,7 @@
         android:layout_marginLeft="54dp"
         android:layout_below="@+id/filtra_loc"
         android:layout_marginTop="8dp"
-        rsb:absoluteMaxValue="1"
+        rsb:absoluteMaxValue="0"
         rsb:absoluteMinValue="10"
         rsb:singleThumb="true"/>
 

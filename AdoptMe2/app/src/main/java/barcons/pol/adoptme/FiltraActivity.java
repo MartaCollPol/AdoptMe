@@ -77,6 +77,7 @@ public class FiltraActivity extends AppCompatActivity {
         edat_bar.setEnabled(false);
 
 
+
         //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
         // Checkbox a que d'altres estiguin clicats prèviament
         // (funcions whenchecked, whenchecked2 i whenchecked3)

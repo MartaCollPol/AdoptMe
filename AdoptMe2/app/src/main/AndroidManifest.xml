@@ -46,7 +46,8 @@
         </activity>
         <activity android:name=".InfoActivity" />
         <activity android:name=".CreaActivity" />
-        <activity android:name=".FiltraActivity"></activity>
+        <activity android:name=".FiltraActivity" />
+        <activity android:name=".FirstTimeActivity"></activity>
     </application>
 
 </manifest>

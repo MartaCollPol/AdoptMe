@@ -16,8 +16,6 @@ public class GetDeviceId {
     public GetDeviceId(Context mContext) {
         this.mContext = mContext;
     }
-
-
     /*Anirà al first time activity tmb*/
     public boolean CheckReadPermission(){
         //Asking permissions to obtain the device id

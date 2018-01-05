@@ -132,6 +132,7 @@ public class CreaActivity extends AppCompatActivity {
             }
             if(flag == false){
                     CreaAnunci();
+                    finish();
                 }
 
 

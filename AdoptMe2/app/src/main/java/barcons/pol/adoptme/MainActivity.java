@@ -10,7 +10,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,13 +28,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GetDeviceId;
+import barcons.pol.adoptme.Utils.GetUserId;
 import barcons.pol.adoptme.Utils.ListAdapter;
 
 //import per obtenir l'id unic del dispositiu
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> imgid = new ArrayList<>();
     ArrayList<String> dist = new ArrayList<>();
 
-    private String UserId;
     private String deviceId;
+
 
 
     @Override
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 flag_is_read_permission_set=true;
-                onResume();
             }else finish();
         }
     }
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         if (Settings.System.canWrite(this)) {
             flag_is_write_permission_set = true;
         }
-        PermissionGranted(flag_is_write_permission_set);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -132,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-            //Es requereix utilitzar el sistema d'autentificació del firebase per poder
-            // utilitzar l'storage
             signInAnonymously();
 
             //Obtenim l'id del dispositiu per saber quin és el Current User
@@ -150,8 +145,7 @@ public class MainActivity extends AppCompatActivity {
                         TELEPHONY_SERVICE);
                 deviceId = uid.GetId(telephonyManager);
                 if(deviceId==null){
-                    Log.e("GetDeviceId","Couldn't get the DeviceId");
-                    finish();
+                    Log.e("GetDeviceId/Main","Couldn't get the DeviceId");
                 }
             }
 
@@ -170,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
                     ListAdapter adapter = new ListAdapter(
                             MainActivity.this,
                             imgid,
-                            dist
+                            dist,
+                            deviceId
                     );
                     list.setAdapter(adapter);
                 }
@@ -187,56 +182,15 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //TODO: comentar la linea GetUser(view) i activar la de writeNewUser anar al final de la mainactivity i descomentar el mètode, iniciar la app i fer click al boto de creaactivity UN SOL cop per crear el vostre usuari
                     //TODO: un cop fet, tornar a deixar la linea writenewuser comentada i descomentar la de getuser.
-                    //writeNewUser("Nom", deviceId);
+                    //writeNewUser("Tester", deviceId);
                     //Obtenim l'usuari i iniciem la CreaActivity
-                    GetUser(view);
+                    GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
+                    CreaAd.GetUser(0);
                 }
             });
 
-
-
-
         } else finish();
     }
-
-    public void GetUser(final View view) {
-
-        final String TAG = "GettingUserId";
-
-        Query query = UsersRef.orderByChild("uid").equalTo(deviceId);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Log.e("mcoll","User exists");
-                    for(DataSnapshot uid: dataSnapshot.getChildren()){
-                        UserId = uid.getKey();
-                        Log.e("mcoll","value:"+UserId);
-                        createAd(view, UserId);
-                    }
-
-                } else {
-                    Log.e(TAG, "User not found");
-                    Snackbar.make(view, R.string.usrnotfound, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "Database Error");
-            }
-        });
-
-    }
-
-    public void createAd(View view,String user) { //anar al layout i assignar aquest metode a un botó per a iniciar la infoactivity
-        Intent intent = new Intent(this, CreaActivity.class);
-        intent.putExtra("user", user);
-        startActivity(intent);
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -279,8 +233,7 @@ public class MainActivity extends AppCompatActivity {
     private void writeNewUser(String name, String uid) {
         User user = new User(name,uid);
         UsersRef.push().setValue(user);
-    } */
-
+    }*/
 
 }
 

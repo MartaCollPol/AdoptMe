@@ -32,9 +32,10 @@ import barcons.pol.adoptme.R;
  */
 
 public class ListAdapter extends ArrayAdapter<String> {
-    private final Activity context;
-    private final ArrayList<String> imatgeid;
-    private final ArrayList<String> dist;
+    private final Activity mContext;
+    private final ArrayList<String> mImatgeid;
+    private final ArrayList<String> mDist;
+    private final String mDeviceid;
 
     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
     StorageReference ImgRef;
@@ -45,11 +46,12 @@ public class ListAdapter extends ArrayAdapter<String> {
 
 
 
-    public ListAdapter(@NonNull Activity context, ArrayList<String> imatgeid, ArrayList<String> dist) {
+    public ListAdapter(@NonNull Activity context, ArrayList<String> imatgeid, ArrayList<String> dist,String mDeviceid) {
         super(context, R.layout.anunci, imatgeid);
-        this.context = context;
-        this.dist = dist;
-        this.imatgeid = imatgeid;
+        this.mContext = context;
+        this.mDist = dist;
+        this.mImatgeid = imatgeid;
+        this.mDeviceid = mDeviceid;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ListAdapter extends ArrayAdapter<String> {
             result = inflater.inflate(R.layout.anunci, null);
         }
 
-        CheckBox chk = (CheckBox) result.findViewById(R.id.chk_anunci);
+        final CheckBox chk = (CheckBox) result.findViewById(R.id.chk_anunci);
         TextView txt = (TextView) result.findViewById(R.id.txt_anunci);
         img = (ImageView) result.findViewById(R.id.img_anunci);
         Button btn = (Button) result.findViewById(R.id.btn_info);
@@ -68,14 +70,14 @@ public class ListAdapter extends ArrayAdapter<String> {
         chk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:trobar el current user i assignarli l'anunci al child saved
-                //https://developer.android.com/training/articles/user-data-ids.html
+                GetUserId SaveAd = new GetUserId(mContext,mDeviceid,chk,mImatgeid.get(position));
+                SaveAd.GetUser(1);
             }
         });
 
 
-        txt.setText(dist.get(position));
-        ImgRef = StorageRef.child(imatgeid.get(position));
+        txt.setText(mDist.get(position));
+        ImgRef = StorageRef.child(mImatgeid.get(position));
         ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -96,10 +98,10 @@ public class ListAdapter extends ArrayAdapter<String> {
 
 
     private void showinfo(View view,int position){
-        Intent intent = new Intent(context, InfoActivity.class);
-        String adid= imatgeid.get(position); //id de l'anunci "query de key de l'anunci clicat"
+        Intent intent = new Intent(mContext, InfoActivity.class);
+        String adid= mImatgeid.get(position); //id de l'anunci "query de key de l'anunci clicat"
         intent.putExtra("ad",adid);
-        context.startActivity(intent);
+        mContext.startActivity(intent);
     }
 
     //Asynctask per descarregar la imatge des de l'url
@@ -114,7 +116,7 @@ public class ListAdapter extends ArrayAdapter<String> {
         @Override
         protected void onPostExecute(String result){
             if(result!=null){
-                Picasso.with(context).load(result).into(img);
+                Picasso.with(mContext).load(result).into(img);
             }
             else Log.i(TAG,"Could not set the image");
         }

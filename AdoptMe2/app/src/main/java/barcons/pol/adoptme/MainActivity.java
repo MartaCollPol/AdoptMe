@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -127,6 +128,31 @@ public class MainActivity extends AppCompatActivity {
         }else { flag_is_write_permission_set = true;}
 
         PermissionGranted(flag_is_write_permission_set);
+
+        //Accedir als botons de la Bottom Bar Navigation
+
+        BottomNavigationView bottomNavigationV =(BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.action_search:
+                        Toast.makeText(getApplicationContext(), "Search screen", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    case R.id.action_save:
+                        Toast.makeText(getApplicationContext(), "Save screen", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    case R.id.action_home:
+                        Toast.makeText(getApplicationContext(), "Home screen", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                }
+                return false;
+            }
+        });
     }
 
     private void PermissionGranted(boolean permission) {
@@ -205,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                     //TODO: un cop fet, tornar a deixar la linea writenewuser comentada i descomentar la de getuser.
                     //writeNewUser("Tester API 22", deviceId);
                     //Obtenim l'usuari i iniciem la CreaActivity
-                    GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
+                   GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
                     CreaAd.GetUser(0);
                 }
             });
@@ -268,6 +294,5 @@ public class MainActivity extends AppCompatActivity {
         User user = new User(name,uid);
         UsersRef.push().setValue(user);
     }
-
 }
 

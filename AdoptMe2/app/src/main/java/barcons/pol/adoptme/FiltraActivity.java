@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
@@ -21,6 +22,7 @@ public class FiltraActivity extends AppCompatActivity {
     CheckBox desc;
     RangeSeekBar loc_bar;
     RangeSeekBar edat_bar;
+
 
     //Menú de la barra de dalt de Filtractivity
     @Override
@@ -47,6 +49,9 @@ public class FiltraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtra);
 
+
+
+
         // Setup the new range seek bar
         RangeSeekBar<Integer> rangeSeekBar = new RangeSeekBar<>(this);
         // Set the range
@@ -62,6 +67,8 @@ public class FiltraActivity extends AppCompatActivity {
 
         //Per que aparegui el botó de BACK a la barra de dalt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         loc = (CheckBox)findViewById(R.id.filtra_loc);
         Edat = (CheckBox)findViewById(R.id.filtra_edat);

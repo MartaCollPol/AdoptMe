@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                     //TODO: comentar la linea GetUser(view) i activar la de writeNewUser anar al final de la mainactivity i descomentar el mètode, iniciar la app i fer click al boto de creaactivity UN SOL cop per crear el vostre usuari
                     //TODO: un cop fet, tornar a deixar la linea writenewuser comentada i descomentar la de getuser.
                     //writeNewUser("Tester API 22", deviceId);
-                    //Obtenim l'usuari i iniciem la CreaActivity
+                    //Obtenim l'usuari i iniciem la CreaActivity.
                     GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
                     CreaAd.GetUser(0);
                 }

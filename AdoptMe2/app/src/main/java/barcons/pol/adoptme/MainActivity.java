@@ -12,32 +12,34 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GetDeviceId;
 import barcons.pol.adoptme.Utils.GetUserId;
-import barcons.pol.adoptme.Utils.ListAdapter;
+import barcons.pol.adoptme.Utils.ImgViewHolder;
 
 //import per obtenir l'id unic del dispositiu
 
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> imgid = new ArrayList<>();
     ArrayList<String> dist = new ArrayList<>();
 
+    private RecyclerView rcvListImg;
     private String deviceId;
+    private FirebaseRecyclerAdapter<Ad, ImgViewHolder> mAdapter;
 
 
 
@@ -80,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     //Read permission Result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -94,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     @Override
     protected void onResume() {
@@ -156,32 +157,45 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            final ListView list = (ListView) findViewById(R.id.list);
-            //TODO: canviar el mètode de visualitzar els anuncis per aquest, ja que és més eficient:
-            // http://javasampleapproach.com/android/firebase-storage-get-list-files-display-image-firebase-ui-database-android
-            AdsRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> ads = dataSnapshot.getChildren();
-                    for (DataSnapshot ad : ads) {
-                        imgid.add(ad.getKey());
-                        dist.add("gos");
-                        //on posa gos afagirem les distàncies amb ad.child(distancia).getValue();
-                    }
-                    ListAdapter adapter = new ListAdapter(
-                            MainActivity.this,
-                            imgid,
-                            dist,
-                            deviceId
-                    );
-                    list.setAdapter(adapter);
-                }
+            rcvListImg = (RecyclerView) findViewById(R.id.recyclerview);
 
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setReverseLayout(false);
+            rcvListImg.setHasFixedSize(false);
+            rcvListImg.setLayoutManager(layoutManager);
+
+            //TODO: Afegir un divisor "gris" com el de la app Reddit entre els anuncis, i un marge al final : https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
+
+            final Query query =AdsRef.limitToLast(10);
+
+            mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
+                    Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.i("Adlist", "Failed on retrieving the adlist");
+                protected void populateViewHolder(final ImgViewHolder viewHolder, Ad model, final int position) {
+                    viewHolder.nameView.setText(model.sexe);
+                    Picasso.with(MainActivity.this)
+                            .load(model.url)
+                            .error(R.drawable.common_google_signin_btn_icon_dark)
+                            .into(viewHolder.imageView);
+
+                    viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            GetUserId SaveAd = new GetUserId(MainActivity.this,deviceId,viewHolder.saveCheck,getRef(position).getKey());
+                            SaveAd.GetUser(1);
+                        }
+                    });
+                    viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showinfo(v,getRef(position).getKey());
+                        }
+                    });
+                   //TODO: Afegir comprovar Current user -> delete i edit setVisibility(), activar les funcions editar i borrar
                 }
-            });
+            };
+
+            rcvListImg.setAdapter(mAdapter);
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +212,19 @@ public class MainActivity extends AppCompatActivity {
 
         } else finish();
     }
+
+    private void showinfo(View view,String adname){
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("ad",adname);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
 
     <TextView
         android:id="@+id/txt_anunci"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0.28"
         android:text="TextView"
         android:textAlignment="viewStart"
-        android:layout_gravity="start"
         android:textSize="18sp" />
 
     <!-- canviar layout width a 400dp si hi han problemes -->
@@ -42,13 +43,34 @@
             android:background="@drawable/button_style"
             android:onClick="showinfo" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="195dp"
             android:layout_height="match_parent"
             android:layout_weight="0.79"
             android:orientation="vertical">
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btn_borrar"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="59dp"
+                android:layout_marginStart="59dp"
+                android:layout_toEndOf="@+id/btn_editar"
+                android:layout_toRightOf="@+id/btn_editar"
+                android:text="DELETE" />
+
+            <Button
+                android:id="@+id/btn_editar"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="28dp"
+                android:layout_marginStart="28dp"
+                android:text="EDIT" />
+        </RelativeLayout>
 
         <CheckBox
             android:id="@+id/chk_anunci"

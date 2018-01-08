@@ -1,5 +1,6 @@
 package barcons.pol.adoptme;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -52,6 +53,7 @@ public class CreaActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+    DatabaseReference newRef;
     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
 
 
@@ -272,9 +274,27 @@ public class CreaActivity extends AppCompatActivity {
         usuari.phone = Long.parseLong(text_telf.getText().toString());
 
 
-        DatabaseReference newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
-        newRef.setValue(anunci);
+        newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
         adkey = newRef.getKey();
+        //Afegim la imatge fotografiada al Firebase Storage i li assignem el nom de l'anunci
+        final String TAG = "FirebaseStorage";
+        StorageReference fileRef = StorageRef.child(adkey);
+
+        fileRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.i(TAG,"Image upload to Cloud Storage failed");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>(){
+            @SuppressLint("VisibleForTests")
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                anunci.url = taskSnapshot.getDownloadUrl().toString();
+                Log.i(TAG,"Image uploaded successfully" + anunci.url);
+                newRef.setValue(anunci);//Afegim l'anunci
+            }
+        });
+
         //fem un update de l'usuari en cas de que hagin canviat valors en algun dels camps de l'usuari
         HashMap<String, Object> Updateuser = new HashMap<>();
         Updateuser.put("name", usuari.name);
@@ -287,24 +307,9 @@ public class CreaActivity extends AppCompatActivity {
         Adcreated.put(adkey, true);
         CreatedRef.updateChildren(Adcreated);
 
-        //Afegim la imatge fotografiada al Firebase Storage i li assignem el nom de l'anunci
-        final String TAG = "FirebaseStorage";
-        StorageReference fileRef = StorageRef.child(adkey);
-
-        fileRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.i(TAG,"Image upload to Cloud Storage failed");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>(){
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i(TAG,"Image uploaded successfully");
-            }
-        });
-
         finish();
     }
+
 
     private void whenchecked(CheckBox a, CheckBox b) {
         if (a.isChecked()) {
@@ -341,8 +346,6 @@ public class CreaActivity extends AppCompatActivity {
     }
 
     //GUARDAR EL FITXER AL DISPOSITIU
-
-    String mCurrentPhotoPath;
 
     private File createImageFile() {
         // Create an image file name

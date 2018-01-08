@@ -75,7 +75,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/first_cognom"
         android:layout_marginBottom="20dp"
-        android:text="@string/ok"
+        android:text="@string/next"
         android:textColor="@android:color/background_dark"
-        android:textSize="32sp" />
+        android:textSize="24sp" />
 </RelativeLayout>

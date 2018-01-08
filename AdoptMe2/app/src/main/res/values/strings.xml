@@ -21,5 +21,6 @@
     <string name="usrnotfound">User not found</string>
     <string name="adoptme">Adopt Me</string>
     <string name="cognom">Surname</string>
-    <string name="ok">OK</string>
+    <string name="next">NEXT</string>
+    <string name="writenotallowed">The app will not work without Write permissions</string>
 </resources>

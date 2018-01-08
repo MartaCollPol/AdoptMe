@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GetDeviceId;
 import barcons.pol.adoptme.Utils.GetUserId;
@@ -79,53 +81,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    //Read permission Result
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 0) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 flag_is_read_permission_set=true;
-            }else finish();
+            }else {
+                Toast.makeText(this, R.string.writenotallowed, Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (Settings.System.canWrite(this)) {
-            flag_is_write_permission_set = true;
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Settings.System.canWrite(this)) flag_is_write_permission_set = true;
+        }else flag_is_write_permission_set=true;
+
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també.
+        //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també,
+        // per a APIs inferiors a la 23 aquest permis s'activa permenentment en la instalació
         starterintent = getIntent();
-        if (!Settings.System.canWrite(this)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(!Settings.System.canWrite(this)){
             flag_is_write_permission_set = false;
             Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
             intent.setData(Uri.parse("package:" + this.getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivityForResult(intent, MainActivity.CODE_WRITE_SETTINGS_PERMISSION);
-        } else {
+            } else {
             flag_is_write_permission_set = true;
-        }
+            }
+        }else { flag_is_write_permission_set = true;}
 
         PermissionGranted(flag_is_write_permission_set);
-
     }
 
     private void PermissionGranted(boolean permission) {
         if (permission) {
             setContentView(R.layout.activity_main);
             //Bloqueigem la rotació del dispositiu
-            setAutoOrientationEnabled(this, false);
+            setAutoOrientationEnabled(this);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -182,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //TODO: comentar la linea GetUser(view) i activar la de writeNewUser anar al final de la mainactivity i descomentar el mètode, iniciar la app i fer click al boto de creaactivity UN SOL cop per crear el vostre usuari
                     //TODO: un cop fet, tornar a deixar la linea writenewuser comentada i descomentar la de getuser.
-                    //writeNewUser("Tester", deviceId);
+                    //writeNewUser("Tester API 22", deviceId);
                     //Obtenim l'usuari i iniciem la CreaActivity
                     GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
                     CreaAd.GetUser(0);
@@ -203,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void setAutoOrientationEnabled(Context context, boolean enabled) {
+    public static void setAutoOrientationEnabled(Context context) {
         Settings.System.putInt(
                 context.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, enabled ? 1 : 0);
+                Settings.System.ACCELEROMETER_ROTATION, 0);
     }
 
     //ho utilitzem per a poder fer servir el FirebaseStorage. Tots els usuaris seran anonims.
@@ -228,12 +235,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    /*
+
     //A first time activity per crear un nou user. Juntament amb l'obtenció del device id.
     private void writeNewUser(String name, String uid) {
         User user = new User(name,uid);
         UsersRef.push().setValue(user);
-    }*/
+    }
 
 }
 

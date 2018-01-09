@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Accedir als botons de la Bottom Bar Navigation
 
-        BottomNavigationView bottomNavigationV =(BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 

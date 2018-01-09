@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
+import org.w3c.dom.Text;
 
 
 public class FiltraActivity extends AppCompatActivity {
@@ -20,8 +22,10 @@ public class FiltraActivity extends AppCompatActivity {
     CheckBox mascle;
     CheckBox femella;
     CheckBox desc;
-    RangeSeekBar loc_bar;
+    RangeSeekBar locc_bar;
     RangeSeekBar edat_bar;
+    private SeekBar loc_bar;
+    private TextView valor_km;
 
 
     //Menú de la barra de dalt de Filtractivity
@@ -49,20 +53,39 @@ public class FiltraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtra);
 
+        loc_bar = (SeekBar) findViewById(R.id.loc_bar);
+        valor_km = (TextView) findViewById(R.id.valor_km);
+        valor_km.setText(loc_bar.getProgress() + " Km (max)");
 
+        loc_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                valor_km.setText(progress + " Km (max)");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
 
         // Setup the new range seek bar
-        RangeSeekBar<Integer> rangeSeekBar = new RangeSeekBar<>(this);
+        RangeSeekBar < Integer > rangeSeekBar = new RangeSeekBar<>(this);
         // Set the range
         rangeSeekBar.setRangeValues(15, 90);
         rangeSeekBar.setSelectedMinValue(20);
         rangeSeekBar.setSelectedMaxValue(88);
 
         // Seek bar for which we will set text color in code
-        loc_bar = (RangeSeekBar) findViewById(R.id.loc_bar);
+        //locc_bar = (RangeSeekBar) findViewById(R.id.loc_bar);
         edat_bar = (RangeSeekBar) findViewById(R.id.edat_bar);
-        loc_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
+        //locc_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
         edat_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
 
         //Per que aparegui el botó de BACK a la barra de dalt
@@ -177,8 +200,7 @@ public class FiltraActivity extends AppCompatActivity {
 
         if (!(a.isChecked())){
             loc_bar.setEnabled(false);
-            loc_bar.resetSelectedValues();
-
+            loc_bar.setProgress(0);
 
         }
     }

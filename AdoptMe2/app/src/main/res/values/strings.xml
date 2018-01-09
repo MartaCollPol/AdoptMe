@@ -2,7 +2,7 @@
     <string name="app_name">AdoptMe</string>
     <string name="action_settings">Settings</string>
     <string name="descripcio">Description</string>
-    <string name="edat">Age :</string>
+    <string name="edat">Age</string>
     <string name="anys">Years</string>
     <string name="desconegut">Unknown</string>
     <string name="sexe">Sex</string>

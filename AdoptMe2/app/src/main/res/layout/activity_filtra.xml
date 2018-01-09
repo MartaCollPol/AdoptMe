@@ -39,7 +39,7 @@
         android:layout_alignLeft="@+id/filtra_edat"
         android:layout_alignStart="@+id/filtra_edat"
         android:layout_below="@+id/filtra_edat"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="150dp"
         android:text="@string/sexe"
         android:textSize="24sp" />
 
@@ -89,7 +89,27 @@
         rsb:absoluteMaxValue="0"
         rsb:absoluteMinValue="15"/>
 
-    <org.florescu.android.rangeseekbar.RangeSeekBar
+    <SeekBar
+        android:id="@+id/loc_bar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filtra_loc"
+        android:layout_marginLeft="54dp"
+        android:layout_marginTop="8dp"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/valor_km"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/loc_bar"
+        android:layout_alignRight="@+id/loc_bar"
+        android:layout_below="@+id/loc_bar"
+        android:layout_marginTop="15dp"
+        android:text="TextView"
+        android:textSize="17sp" />
+
+    <!--<org.florescu.android.rangeseekbar.RangeSeekBar
         android:id="@+id/loc_bar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -100,7 +120,7 @@
         rsb:absoluteMinValue="200"
         rsb:singleThumb="true"/>
 
-
+-->
 
 
 

@@ -109,19 +109,6 @@
         android:text="TextView"
         android:textSize="17sp" />
 
-    <!--<org.florescu.android.rangeseekbar.RangeSeekBar
-        android:id="@+id/loc_bar"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="54dp"
-        android:layout_below="@+id/filtra_loc"
-        android:layout_marginTop="8dp"
-        rsb:absoluteMaxValue="0"
-        rsb:absoluteMinValue="200"
-        rsb:singleThumb="true"/>
-
--->
-
 
 
 </RelativeLayout>

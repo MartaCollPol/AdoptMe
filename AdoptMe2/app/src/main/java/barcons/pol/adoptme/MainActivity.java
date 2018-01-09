@@ -3,6 +3,7 @@ package barcons.pol.adoptme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -189,6 +190,14 @@ public class MainActivity extends AppCompatActivity {
             layoutManager.setReverseLayout(false);
             rcvListImg.setHasFixedSize(false);
             rcvListImg.setLayoutManager(layoutManager);
+
+            /*rcvListImg.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                    outRect.bottom = 10;
+                    super.getItemOffsets(outRect, view, parent, state);
+                }
+            }); */
 
             //TODO: Afegir un divisor "gris" com el de la app Reddit entre els anuncis, i un marge al final : https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
 

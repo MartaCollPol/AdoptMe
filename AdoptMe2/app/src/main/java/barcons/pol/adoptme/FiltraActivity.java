@@ -83,9 +83,7 @@ public class FiltraActivity extends AppCompatActivity {
         rangeSeekBar.setSelectedMaxValue(88);
 
         // Seek bar for which we will set text color in code
-        //locc_bar = (RangeSeekBar) findViewById(R.id.loc_bar);
         edat_bar = (RangeSeekBar) findViewById(R.id.edat_bar);
-        //locc_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
         edat_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
 
         //Per que aparegui el botó de BACK a la barra de dalt

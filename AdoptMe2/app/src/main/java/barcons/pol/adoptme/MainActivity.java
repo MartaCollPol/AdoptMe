@@ -3,7 +3,6 @@ package barcons.pol.adoptme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -31,10 +29,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
@@ -59,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
     boolean flag_is_write_permission_set = false;
     private static final int PERMISSION_READ_STATE = 112;
     private boolean flag_is_read_permission_set=false;
-
-    ArrayList<String> imgid = new ArrayList<>();
-    ArrayList<String> dist = new ArrayList<>();
 
     private RecyclerView rcvListImg;
     private String deviceId;
@@ -130,30 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
         PermissionGranted(flag_is_write_permission_set);
 
-        //Accedir als botons de la Bottom Bar Navigation
-
-        BottomNavigationView bottomNavigationV = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()) {
-
-                    case R.id.action_search:
-                        Toast.makeText(getApplicationContext(), "Search screen", Toast.LENGTH_SHORT).show();
-                        return true;
-
-                    case R.id.action_save:
-                        Toast.makeText(getApplicationContext(), "Save screen", Toast.LENGTH_SHORT).show();
-                        return true;
-
-                    case R.id.action_home:
-                        Toast.makeText(getApplicationContext(), "Home screen", Toast.LENGTH_SHORT).show();
-                        return true;
-
-                }
-                return false;
-            }
-        });
     }
 
     private void PermissionGranted(boolean permission) {
@@ -186,51 +153,31 @@ public class MainActivity extends AppCompatActivity {
 
             rcvListImg = (RecyclerView) findViewById(R.id.recyclerview);
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            layoutManager.setReverseLayout(false);
-            rcvListImg.setHasFixedSize(false);
-            rcvListImg.setLayoutManager(layoutManager);
+            final GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
+            DisplayAds.ShowAds(AdsRef.limitToLast(100));
+            //Accedir als botons de la Bottom Bar Navigation
 
-            /*rcvListImg.addItemDecoration(new RecyclerView.ItemDecoration() {
-                @Override
-                public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                    outRect.bottom = 10;
-                    super.getItemOffsets(outRect, view, parent, state);
+            BottomNavigationView bottomNavigationV =(BottomNavigationView) findViewById(R.id.bottom_navigation);
+            bottomNavigationV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+
+                        case R.id.action_search:
+                            DisplayAds.ShowAds(AdsRef.limitToLast(100));
+                            return true;
+
+                        case R.id.action_save:
+                            DisplayAds.GetUser(2);
+                            return true;
+
+                        case R.id.action_home:
+                            DisplayAds.GetUser(3);
+                            return true;
+
+                    }
+                    return false;
                 }
-            }); */
-
-            //TODO: Afegir un divisor "gris" com el de la app Reddit entre els anuncis, i un marge al final : https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
-
-            final Query query =AdsRef.limitToLast(10);
-
-            mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
-                    Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
-                @Override
-                protected void populateViewHolder(final ImgViewHolder viewHolder, Ad model, final int position) {
-                    viewHolder.nameView.setText(model.sexe);
-                    Picasso.with(MainActivity.this)
-                            .load(model.url)
-                            .error(R.drawable.common_google_signin_btn_icon_dark)
-                            .into(viewHolder.imageView);
-
-                    viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            GetUserId SaveAd = new GetUserId(MainActivity.this,deviceId,viewHolder.saveCheck,getRef(position).getKey());
-                            SaveAd.GetUser(1);
-                        }
-                    });
-                    viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showinfo(v,getRef(position).getKey());
-                        }
-                    });
-                   //TODO: Afegir comprovar Current user -> delete i edit setVisibility(), activar les funcions editar i borrar
-                }
-            };
-
-            rcvListImg.setAdapter(mAdapter);
+            });
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -246,12 +193,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
         } else finish();
-    }
-
-    private void showinfo(View view,String adname){
-        Intent intent = new Intent(this, InfoActivity.class);
-        intent.putExtra("ad",adname);
-        startActivity(intent);
     }
 
     @Override

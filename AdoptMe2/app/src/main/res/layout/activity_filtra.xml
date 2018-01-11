@@ -87,11 +87,11 @@
         android:layout_alignStart="@+id/loc_bar"
         android:layout_below="@+id/filtra_edat"
         rsb:absoluteMaxValue="0"
-        rsb:absoluteMinValue="15"/>
+        rsb:absoluteMinValue="15" />
 
     <SeekBar
         android:id="@+id/loc_bar"
-        android:layout_width="300dp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/filtra_loc"
         android:layout_marginLeft="54dp"
@@ -106,7 +106,7 @@
         android:layout_alignRight="@+id/loc_bar"
         android:layout_below="@+id/loc_bar"
         android:layout_marginTop="15dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="17sp" />
 
 

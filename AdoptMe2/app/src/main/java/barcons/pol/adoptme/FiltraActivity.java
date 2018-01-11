@@ -1,8 +1,8 @@
 package barcons.pol.adoptme;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
-import org.w3c.dom.Text;
 
 
 public class FiltraActivity extends AppCompatActivity {
@@ -55,7 +54,7 @@ public class FiltraActivity extends AppCompatActivity {
 
         loc_bar = (SeekBar) findViewById(R.id.loc_bar);
         valor_km = (TextView) findViewById(R.id.valor_km);
-        valor_km.setText(loc_bar.getProgress() + " Km (max)");
+        valor_km.setText(loc_bar.getProgress() + " Km");
 
         loc_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

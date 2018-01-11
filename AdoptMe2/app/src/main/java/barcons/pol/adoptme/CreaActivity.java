@@ -135,10 +135,7 @@ public class CreaActivity extends AppCompatActivity {
             if(flag == false){
                     CreaAnunci();
                     finish();
-                }
-
-
-
+            }
         }
         return true;
     }
@@ -301,11 +298,6 @@ public class CreaActivity extends AppCompatActivity {
         Updateuser.put("email", usuari.email);
         Updateuser.put("phone", usuari.phone);
         UserRef.updateChildren(Updateuser);
-
-        //afegim l'anunci creat al camp "created" de l'usuari
-        HashMap<String, Object> Adcreated = new HashMap<>();
-        Adcreated.put(adkey, true);
-        CreatedRef.updateChildren(Adcreated);
 
         finish();
     }

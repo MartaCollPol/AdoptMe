@@ -68,7 +68,7 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/btn_ok"
+        android:id="@+id/btn_next"
         android:layout_width="90dp"
         android:layout_height="65dp"
         android:layout_alignEnd="@+id/first_cognom"

@@ -1,12 +1,15 @@
 package barcons.pol.adoptme;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -32,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +49,8 @@ import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Objectes.edat;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
+import barcons.pol.adoptme.Utils.GPSTracker;
+
 
 //TODO: Fer que sigui obligatori omplir els camps
 // /TODO: guardar url a la base de dades i mostrar la imatge
@@ -133,8 +140,14 @@ public class CreaActivity extends AppCompatActivity {
                 female.setError("");
             }
             if(flag == false){
+                GPSTracker mGPS = new GPSTracker(this);
+                if(mGPS.canGetLocation ){
                     CreaAnunci();
+                    GuardaLoc();
                     finish();
+                }else {
+                    buildAlertMessageNoGps();
+                }
             }
         }
         return true;
@@ -176,6 +189,10 @@ public class CreaActivity extends AppCompatActivity {
         //Referències
         UserRef = UsersRef.child(us);
         CreatedRef = UserRef.child("created");
+
+
+
+
 
         //damenem permisos de la càmera i d'escritura al dispositiu
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -309,6 +326,36 @@ public class CreaActivity extends AppCompatActivity {
         }
     }
 
+    //Geofire
+    private void GuardaLoc(){
+        GPSTracker mGPS = new GPSTracker(this);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference UsersRef = database.getReference("geofire");
+        GeoFire geoFire = new GeoFire(UsersRef); //ref -> FirebaseReference que apunta a geofire.
+        GeoLocation currentlocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
+        geoFire.setLocation(us,currentlocation);
+    }
+
+
+  protected void buildAlertMessageNoGps() {
+
+      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage("Please Turn ON your GPS Connection")
+              .setCancelable(false)
+              .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                  public void onClick(final DialogInterface dialog, final int id) {
+                      startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                  }
+              })
+              .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                  public void onClick(final DialogInterface dialog, final int id) {
+                      dialog.cancel();
+                  }
+              });
+      final AlertDialog alert = builder.create();
+      alert.show();
+  }
+
 
     //INTENT DE CÀMERA
     static final int REQUEST_TAKE_PHOTO = 110;
@@ -358,6 +405,8 @@ public class CreaActivity extends AppCompatActivity {
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
+
+
 
     /*
        afegir

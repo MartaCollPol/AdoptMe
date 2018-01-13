@@ -39,6 +39,8 @@ dependencies {
     //compile 'com.android.support:design:25.1.1'
     //Add SeekBar multiple
     compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
+    //Add GEOFIRE
+    compile 'com.firebase:geofire-android:2.2.0'
 
     testCompile 'junit:junit:4.12'
 }

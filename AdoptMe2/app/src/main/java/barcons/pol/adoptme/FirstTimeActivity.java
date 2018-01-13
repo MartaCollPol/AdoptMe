@@ -1,5 +1,6 @@
 package barcons.pol.adoptme;
 
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ public class FirstTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_time);
 
+
+
         Button next = (Button) findViewById(R.id.btn_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,4 +31,6 @@ public class FirstTimeActivity extends AppCompatActivity {
 
 
     }
+
+
 }

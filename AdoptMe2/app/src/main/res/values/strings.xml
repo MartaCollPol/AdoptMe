@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AdoptMe</string>
+    <string name="app_name" translatable="false">AdoptMe</string>
     <string name="action_settings">Settings</string>
     <string name="descripcio">Description</string>
     <string name="edat">Age</string>
@@ -19,7 +19,7 @@
     <string name="omple">Fill the missing fields</string>
     <string name="missingimg">The image is missing</string>
     <string name="usrnotfound">User not found</string>
-    <string name="adoptme">Adopt Me</string>
+    <string name="adoptme" translatable="false">Adopt Me</string>
     <string name="cognom">Surname</string>
     <string name="next">NEXT</string>
     <string name="writenotallowed">The app will not work without Write permissions</string>

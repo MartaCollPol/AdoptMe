@@ -2,6 +2,7 @@ package barcons.pol.adoptme.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -175,7 +176,10 @@ public class GetUserId {
         //TODO: Afegir un divisor "gris" com el de la app Reddit entre els anuncis, i un marge al final : https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
 
         rcvListImg.setAdapter(mAdapter);
+
     }
+
+
 
     private void showinfo(View view,String adname){
         Intent intent = new Intent(mContext, InfoActivity.class);

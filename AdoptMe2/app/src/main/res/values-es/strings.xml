@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="descripcio">Descripción</string>
+    <string name="edat">Edad</string>
+    <string name="anys">Anys</string>
+    <string name="desconegut">Desconocido</string>
+    <string name="sexe">Sexo</string>
+    <string name="mascle">Macho</string>
+    <string name="femella">Hembra</string>
+    <string name="distancia">Distancia</string>
+    <string name="contacte">Info de contacto:</string>
+    <string name="nom">Nombre</string>
+    <string name="telefon">Teléfono</string>
+    <string name="email">Email</string>
+    <string name="action_OK">OK</string>
+    <string name="action_filtra">Filtra</string>
+    <string name="localització">Localización</string>
+    <string name="cognom">Apellido</string>
+    <string name="next">Siguiente</string>
+    <string name="usrnotfound">Usuario inexistente</string>
+    <string name="omple">Llenar los campos vacíos</string>
+    <string name="missingimg">Falta la imagen</string>
+    <string name="writenotallowed">La app no funciona sin los \"Write permissions\"</string>
+    <string name="action_settings">Ajustes</string>
+</resources>

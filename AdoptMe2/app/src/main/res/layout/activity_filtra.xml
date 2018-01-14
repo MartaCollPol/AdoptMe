@@ -70,10 +70,10 @@
         android:id="@+id/edat_desconegut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/loc_bar"
-        android:layout_alignStart="@+id/loc_bar"
+        android:layout_alignLeft="@+id/edat_bar"
+        android:layout_alignStart="@+id/edat_bar"
         android:layout_below="@+id/edat_bar"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/desconegut"
         android:textSize="18sp" />
 
@@ -87,7 +87,7 @@
         android:layout_alignStart="@+id/loc_bar"
         android:layout_below="@+id/filtra_edat"
         rsb:absoluteMaxValue="0"
-        rsb:absoluteMinValue="15" />
+        rsb:absoluteMinValue="20" />
 
     <SeekBar
         android:id="@+id/loc_bar"

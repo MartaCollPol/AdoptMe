@@ -23,4 +23,5 @@
     <string name="cognom">Surname</string>
     <string name="next">NEXT</string>
     <string name="writenotallowed">The app will not work without Write permissions</string>
+
 </resources>

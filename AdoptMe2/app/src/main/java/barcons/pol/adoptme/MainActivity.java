@@ -22,20 +22,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-import barcons.pol.adoptme.Objectes.Ad;
-import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GetDeviceId;
 import barcons.pol.adoptme.Utils.GetUserId;
-import barcons.pol.adoptme.Utils.ImgViewHolder;
 
 //import per obtenir l'id unic del dispositiu
 
@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
     boolean flag_is_write_permission_set = false;
     private static final int PERMISSION_READ_STATE = 112;
     private boolean flag_is_read_permission_set=false;
+    private static final int CODE_FILTRAACTIVITY = 110;
 
     private RecyclerView rcvListImg;
     private String deviceId;
-    private FirebaseRecyclerAdapter<Ad, ImgViewHolder> mAdapter;
-
+    String code;
 
 
     @Override
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filtra:
-                startActivity(new Intent(this, FiltraActivity.class));
+                startActivityForResult(new Intent(this, FiltraActivity.class),CODE_FILTRAACTIVITY);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //TODO: Afegir que al tornar enrere d'una activitat estigui seleccionat el mateix menu search/save/home que estaba al marxar
         //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també,
         // per a APIs inferiors a la 23 aquest permis s'activa permenentment en la instalació
         starterintent = getIntent();
@@ -148,13 +148,31 @@ public class MainActivity extends AppCompatActivity {
                 deviceId = uid.GetId(telephonyManager);
                 if(deviceId==null){
                     Log.e("GetDeviceId/Main","Couldn't get the DeviceId");
+                    finish();
                 }
             }
+            //asynck task, es podria fer sartActivity for result i continuar el programa en obtenir result==ok. Evitaria bugs al carregar la llista d'ads.
+            Query query = UsersRef.orderByChild("uid").equalTo(deviceId);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.exists()){
+                        Intent FirstTime=new Intent(MainActivity.this,FirstTimeActivity.class);
+                        FirstTime.putExtra("uid",deviceId);
+                        startActivity(FirstTime);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("FirstTimeQuery","DatabaseError");
+                }
+            });
 
             rcvListImg = (RecyclerView) findViewById(R.id.recyclerview);
 
             final GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
-            DisplayAds.ShowAds(AdsRef.limitToLast(100));
+            DisplayAds.ClearedFirst(AdsRef.limitToLast(100));
             //Accedir als botons de la Bottom Bar Navigation
 
             BottomNavigationView bottomNavigationV =(BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -183,9 +201,6 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: comentar la linea GetUser(view) i activar la de writeNewUser anar al final de la mainactivity i descomentar el mètode, iniciar la app i fer click al boto de creaactivity UN SOL cop per crear el vostre usuari
-                    //TODO: un cop fet, tornar a deixar la linea writenewuser comentada i descomentar la de getuser.
-                    //writeNewUser("Tester API 22", deviceId);
                     //Obtenim l'usuari i iniciem la CreaActivity.
                     GetUserId CreaAd = new GetUserId(MainActivity.this,deviceId,view);
                     CreaAd.GetUser(0);
@@ -194,13 +209,6 @@ public class MainActivity extends AppCompatActivity {
 
         } else finish();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -211,7 +219,16 @@ public class MainActivity extends AppCompatActivity {
             finish();
             startActivity(starterintent);
         }
+        if(requestCode==CODE_FILTRAACTIVITY){
+            if(resultCode==RESULT_OK){
+                code = data.getStringExtra("Codi");
+                if(code.equals(0)){
+                    //TODO: Filtratge.
+                }
+            }
+        }
     }
+
 
     public static void setAutoOrientationEnabled(Context context) {
         Settings.System.putInt(
@@ -238,11 +255,5 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-
-    //A first time activity per crear un nou user. Juntament amb l'obtenció del device id.
-    private void writeNewUser(String name, String uid) {
-        User user = new User(name,uid);
-        UsersRef.push().setValue(user);
-    }
 }
 

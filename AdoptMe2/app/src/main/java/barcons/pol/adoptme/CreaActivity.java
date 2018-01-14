@@ -25,6 +25,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,12 +38,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -60,6 +63,7 @@ public class CreaActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+    DatabaseReference AdExistsRef;
     DatabaseReference newRef;
     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
 
@@ -84,9 +88,11 @@ public class CreaActivity extends AppCompatActivity {
     ImageView imageView;
 
     String us;
+    String ad;
     static String adkey;
     Uri uri;
-    Boolean ImgLoaded = false;
+    private boolean ImgClickedFlag = false;
+    private boolean ImgExistFlag = false;
 
     //Menú de la barra de dalt de CreaActivity, on hi posarem el botó de OK
     @Override
@@ -106,7 +112,7 @@ public class CreaActivity extends AppCompatActivity {
 
             case R.id.action_OK:
                 boolean flag = false;
-                if(!ImgLoaded){
+                if(!ImgExistFlag){
                     flag = true;
                     Snackbar.make(coordinatorLayout, R.string.missingimg, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -142,8 +148,7 @@ public class CreaActivity extends AppCompatActivity {
             if(flag == false){
                 GPSTracker mGPS = new GPSTracker(this);
                 if(mGPS.canGetLocation ){
-                    CreaAnunci();
-                    GuardaLoc();
+                    CreaAnunci(); //GuardaLoc esta a dins de CreaAnunci();
                     finish();
                 }else {
                     buildAlertMessageNoGps();
@@ -185,14 +190,12 @@ public class CreaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         us= intent.getStringExtra("user"); // id de l'usuari que crea l'anunci
+        ad=intent.getStringExtra("ad");
+        Log.e("mcollAd","Ad value: "+ad);
 
         //Referències
         UserRef = UsersRef.child(us);
         CreatedRef = UserRef.child("created");
-
-
-
-
 
         //damenem permisos de la càmera i d'escritura al dispositiu
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -200,15 +203,37 @@ public class CreaActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
         }else imageView.setClickable(true);
 
-        //Al fer click al imageview obrim la càmara
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        //Preomplim els camps de l'anunci en cas que estiguem editant
+        if (!ad.equals("Void")) {
+            AdExistsRef=AdsRef.child(ad);
+            AdExistsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Ad anunciExist = dataSnapshot.getValue(Ad.class);
+                    Glide.with(CreaActivity.this)
+                            .load(anunciExist.url)
+                            .centerCrop()
+                            .error(R.drawable.common_google_signin_btn_icon_dark)
+                            .into(imageView);
+                    text_desc.setText(anunciExist.desc);
+                    desconegut.setChecked(anunciExist.edat.unknown);
+                    female.setChecked(anunciExist.sexe.equals("female"));
+                    male.setChecked(anunciExist.sexe.equals("male"));
+                    String auxedat = String.valueOf(anunciExist.edat.known);
+                    if (auxedat.equals("-1")) {
+                        text_edat.setText("");
+                    }else{text_edat.setText(auxedat);}
 
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("CreaActivity/Edit", "Database Error");
+                }
+            });
+
+            ImgExistFlag=true;
+        }
         //preomplim els camps d'informació de contacte si aquests es troben disponibles a la base de dadesz
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             String TAG = "CreaDataSnapshot";
@@ -227,6 +252,14 @@ public class CreaActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.i(TAG, "Error when capturing the user value");
+            }
+        });
+
+        //Al fer click al imageview obrim la càmara
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
             }
         });
 
@@ -267,10 +300,16 @@ public class CreaActivity extends AppCompatActivity {
     }
 
 
-
     //Creem l'anunci
     private void CreaAnunci(){
+
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy",Locale.FRENCH);
+        String data = df.format(c.getTime());
+
         anunci.user = us;
+        anunci.data = data;
         if (female.isChecked()) {
             anunci.sexe = "female";
         } else anunci.sexe = "male";
@@ -287,27 +326,66 @@ public class CreaActivity extends AppCompatActivity {
         usuari.email = text_email.getText().toString();
         usuari.phone = Long.parseLong(text_telf.getText().toString());
 
-
-        newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
-        adkey = newRef.getKey();
-        //Afegim la imatge fotografiada al Firebase Storage i li assignem el nom de l'anunci
         final String TAG = "FirebaseStorage";
-        StorageReference fileRef = StorageRef.child(adkey);
 
-        fileRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.i(TAG,"Image upload to Cloud Storage failed");
+        if(ad.equals(null)) {
+            newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
+            adkey = newRef.getKey();
+            //Afegim la imatge fotografiada al Firebase Storage i li assignem el nom de l'anunci
+
+            StorageReference fileRef = StorageRef.child(adkey);
+
+            fileRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.i(TAG, "Image upload to Cloud Storage failed");
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @SuppressLint("VisibleForTests")
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    anunci.url = taskSnapshot.getDownloadUrl().toString();
+                    Log.i(TAG, "Image uploaded successfully" + anunci.url);
+                    newRef.setValue(anunci);//Afegim l'anunci
+                }
+            });
+            GuardaLoc(adkey);
+        }else{ //Editem un anunci existent
+            final HashMap<String, Object> UpdateAd = new HashMap<>();
+            UpdateAd.put("sexe",anunci.sexe);
+            UpdateAd.put("desc",anunci.desc);
+            UpdateAd.put("edat/known",anunci.edat.known);
+            UpdateAd.put("edat/unknown",anunci.edat.unknown);
+            UpdateAd.put("data",anunci.data);
+
+            if(ImgClickedFlag){
+                StorageReference fileRef = StorageRef.child(ad);
+                fileRef.delete();//Borrem l'anterior foto
+                fileRef.putFile(uri).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.i(TAG, "Image upload to Cloud Storage failed");
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @SuppressLint("VisibleForTests")
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        anunci.url = taskSnapshot.getDownloadUrl().toString();
+                        Log.i(TAG, "Image uploaded successfully" + anunci.url);
+                        UpdateAd.put("url",anunci.url);//Afegim l'anunci
+                        AdExistsRef.updateChildren(UpdateAd);
+                        Log.e("mcolldins","valorflag :"+ImgExistFlag);
+                    }
+                });
+
+            }else {
+                Log.e("mcollfora","valorflag :"+ImgExistFlag);
+                AdExistsRef.updateChildren(UpdateAd);
+                GuardaLoc(ad);
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>(){
-            @SuppressLint("VisibleForTests")
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                anunci.url = taskSnapshot.getDownloadUrl().toString();
-                Log.i(TAG,"Image uploaded successfully" + anunci.url);
-                newRef.setValue(anunci);//Afegim l'anunci
-            }
-        });
+
+
+        }
 
         //fem un update de l'usuari en cas de que hagin canviat valors en algun dels camps de l'usuari
         HashMap<String, Object> Updateuser = new HashMap<>();
@@ -319,7 +397,6 @@ public class CreaActivity extends AppCompatActivity {
         finish();
     }
 
-
     private void whenchecked(CheckBox a, CheckBox b) {
         if (a.isChecked()) {
             b.setChecked(false);
@@ -327,13 +404,12 @@ public class CreaActivity extends AppCompatActivity {
     }
 
     //Geofire
-    private void GuardaLoc(){
+    private void GuardaLoc(String adloc){
         GPSTracker mGPS = new GPSTracker(this);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference UsersRef = database.getReference("geofire");
-        GeoFire geoFire = new GeoFire(UsersRef); //ref -> FirebaseReference que apunta a geofire.
+        DatabaseReference GeoRef = database.getReference("geofire");
+        GeoFire geoFire = new GeoFire(GeoRef); //ref -> FirebaseReference que apunta a geofire.
         GeoLocation currentlocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
-        geoFire.setLocation(us,currentlocation);
+        geoFire.setLocation(adloc,currentlocation);
     }
 
 
@@ -360,6 +436,7 @@ public class CreaActivity extends AppCompatActivity {
     //INTENT DE CÀMERA
     static final int REQUEST_TAKE_PHOTO = 110;
     private void dispatchTakePictureIntent() {
+        ImgClickedFlag = true;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -380,7 +457,7 @@ public class CreaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             imageView.setImageURI(uri);
-            ImgLoaded = true;
+            ImgExistFlag=true;
         }
     }
 

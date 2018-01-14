@@ -10,7 +10,12 @@ import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.florescu.android.rangeseekbar.RangeSeekBar;
+
+import barcons.pol.adoptme.Utils.FirebaseReferences;
 
 
 public class FiltraActivity extends AppCompatActivity {
@@ -21,11 +26,15 @@ public class FiltraActivity extends AppCompatActivity {
     CheckBox mascle;
     CheckBox femella;
     CheckBox desc;
-    RangeSeekBar locc_bar;
-    RangeSeekBar edat_bar;
+    RangeSeekBar<Integer> edat_bar;
     private SeekBar loc_bar;
     private TextView valor_km;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
 
+    int km = 10;
+    int edatMin;
+    int edatMax;
 
     //Menú de la barra de dalt de Filtractivity
     @Override
@@ -39,8 +48,35 @@ public class FiltraActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case android.R.id.home:
-                startActivity(new Intent(this, MainActivity.class));
+            case R.id.action_OK:
+                String code=null;
+                Intent data = new Intent();
+                if(mascle.isChecked()){
+                    code="0"; //TODO: pensar millor, querys complexes
+                }
+                else if(femella.isChecked()){
+                    code="1";
+                    //query=QueryMF("sexe","female");
+                }
+                else if(Edat.isChecked()){
+                    if(desc.isChecked()){
+                        code="2";//query=AdsRef.orderByChild("edat/unknown").equalTo(true);
+                    }
+                    if(edat_bar.getAbsoluteMaxValue()!=edatMax || edat_bar.getAbsoluteMinValue()!=edatMin){
+                        code="3";
+                        data.putExtra("EdatMin",edatMin);
+                        data.putExtra("EdatMax",edatMax);
+                    }
+                }
+                else if(loc.isChecked()){
+                    code="4";
+                    data.putExtra("Km",km);
+                }
+
+                data.putExtra("Codi", code);
+
+                setResult(RESULT_OK, data);
+                finish();
                 return true;
 
         }
@@ -54,41 +90,6 @@ public class FiltraActivity extends AppCompatActivity {
 
         loc_bar = (SeekBar) findViewById(R.id.loc_bar);
         valor_km = (TextView) findViewById(R.id.valor_km);
-        valor_km.setText(loc_bar.getProgress() + " Km");
-
-        loc_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                valor_km.setText(progress + " Km (max)");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-
-        // Setup the new range seek bar
-        RangeSeekBar < Integer > rangeSeekBar = new RangeSeekBar<>(this);
-        // Set the range
-        rangeSeekBar.setRangeValues(15, 90);
-        rangeSeekBar.setSelectedMinValue(20);
-        rangeSeekBar.setSelectedMaxValue(88);
-
-        // Seek bar for which we will set text color in code
-        edat_bar = (RangeSeekBar) findViewById(R.id.edat_bar);
-        edat_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
-
-        //Per que aparegui el botó de BACK a la barra de dalt
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
 
         loc = (CheckBox)findViewById(R.id.filtra_loc);
         Edat = (CheckBox)findViewById(R.id.filtra_edat);
@@ -96,112 +97,121 @@ public class FiltraActivity extends AppCompatActivity {
         mascle = (CheckBox)findViewById(R.id.sexe_mascle);
         femella = (CheckBox)findViewById(R.id.sexe_femella);
         desc = (CheckBox)findViewById(R.id.edat_desconegut);
+        edat_bar = (RangeSeekBar) findViewById(R.id.edat_bar);
 
+        //Per que aparegui el botó de BACK a la barra de dalt
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Set the range
+        RangeSeekBar<Integer> rangeSeekBar = new RangeSeekBar<>(this);
+        // Set the range
+        rangeSeekBar.setRangeValues(15, 90);
+        rangeSeekBar.setSelectedMinValue(20);
+        rangeSeekBar.setSelectedMaxValue(88);
+
+        edat_bar.setTextAboveThumbsColorResource(android.R.color.holo_blue_dark);
+
+
+        edat_bar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>(){
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar,Integer minValue, Integer maxValue) {
+                edatMin=minValue;
+                edatMax=maxValue;
+            }
+
+        });
+
+        loc_bar.setProgress(10); //Per defecte
+        valor_km.setText("10 km");
+
+        loc_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                valor_km.setText(progress + " km");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                km = seekBar.getProgress();
+            }
+        });
+
+        //inicialitzem checks
         desc.setEnabled(false);
         mascle.setEnabled(false);
         femella.setEnabled(false);
         loc_bar.setEnabled(false);
         edat_bar.setEnabled(false);
-
-
-
-        //Fem que només un dels checkbox estigui activat al mateix temps, i condicionem alguns
-        // Checkbox a que d'altres estiguin clicats prèviament
-        // (funcions whenchecked, whenchecked2 i whenchecked3)
-
+        //Listeners
         mascle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked(mascle,femella);
-
+                whencheckedMF(mascle,femella);
             }
 
         });
         femella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked(femella,mascle);
+                whencheckedMF(femella,mascle);
             }
         });
+        Edat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Edat.isChecked()) {
+                    desc.setEnabled(true);
+                    FiltraActivity.this.edat_bar.setEnabled(true);
 
-       Edat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                whenchecked2(Edat,desc);
+                }
+                if (!(Edat.isChecked())){
+                    desc.setChecked(false);
+                    desc.setEnabled(false);
+                    FiltraActivity.this.edat_bar.setEnabled(false);
+                    FiltraActivity.this.edat_bar.resetSelectedValues();
+                }
             }
         });
-       Sexe.setOnClickListener(new View.OnClickListener() {
+        Sexe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked3(Sexe,mascle,femella);
+                if (Sexe.isChecked()) {
+                    mascle.setEnabled(true);
+                    femella.setEnabled(true);
+                }
+                if (!(Sexe.isChecked())){
+                    mascle.setChecked(false);
+                    mascle.setEnabled(false);
+                    femella.setChecked(false);
+                    femella.setEnabled(false);
+                }
             }
-       });
+        });
         loc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whenchecked4(loc);
+                if (loc.isChecked()) {
+                    loc_bar.setEnabled(true);
+
+                }
+                if (!(loc.isChecked())){
+                    loc_bar.setEnabled(false);
+                    loc_bar.setProgress(10);
+
+                }
             }
         });
 
-
     }
-
-    private void whenchecked(CheckBox a, CheckBox b) {
+    //Fem que només un dels checkbox estigui activat al mateix temps
+    private void whencheckedMF(CheckBox a, CheckBox b) {
         if (a.isChecked()) {
             b.setChecked(false);
         }
-
     }
-
-
-
-    private void whenchecked2(CheckBox a, CheckBox b) {
-
-        if (a.isChecked()) {
-            b.setEnabled(true);
-            edat_bar.setEnabled(true);
-
-        }
-
-        if (!(a.isChecked())){
-            b.setChecked(false);
-            b.setEnabled(false);
-            edat_bar.setEnabled(false);
-            edat_bar.resetSelectedValues();
-
-        }
-    }
-
-
-    private void whenchecked3(CheckBox a, CheckBox b, CheckBox c) {
-
-        if (a.isChecked()) {
-            b.setEnabled(true);
-            c.setEnabled(true);
-        }
-
-        if (!(a.isChecked())){
-            b.setChecked(false);
-            b.setEnabled(false);
-            c.setChecked(false);
-            c.setEnabled(false);
-        }
-    }
-
-    private void whenchecked4(CheckBox a) {
-
-        if (a.isChecked()) {
-            loc_bar.setEnabled(true);
-
-        }
-
-        if (!(a.isChecked())){
-            loc_bar.setEnabled(false);
-            loc_bar.setProgress(0);
-
-        }
-    }
-
 
 }
-//FILTRA

@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/relativeLayout3">
+            android:layout_below="@+id/relativeLayout3"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/km"
@@ -87,12 +88,12 @@
                 android:id="@+id/nom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/contacte"
+                android:layout_alignStart="@+id/contacte"
+                android:layout_below="@+id/contacte"
                 android:layout_marginTop="38dp"
                 android:text="@string/nom"
-                android:textSize="18sp"
-                android:layout_below="@+id/contacte"
-                android:layout_alignLeft="@+id/contacte"
-                android:layout_alignStart="@+id/contacte" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/contacte"
@@ -137,14 +138,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="17dp"
                 android:layout_marginRight="17dp"
-                android:text="@string/femella"
-                android:clickable="false"/> <!-- inhabilitem el checkbox -->
+                android:clickable="false"
+                android:text="@string/femella" /> <!-- inhabilitem el checkbox -->
 
 
             <ImageView
                 android:id="@+id/i_show_image"
-                android:layout_width="400dp"
-                android:layout_height="400dp"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
@@ -212,14 +213,14 @@
                 android:id="@+id/descripcio"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/i_show_image"
                 android:layout_marginLeft="31dp"
                 android:layout_marginStart="31dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/descripcio"
-                android:textSize="18sp"
-                android:layout_below="@+id/i_show_image"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:textSize="18sp" />
 
             <CheckBox
                 android:id="@+id/i_check_desconegut"
@@ -229,8 +230,8 @@
                 android:layout_alignRight="@+id/i_text_descripcio"
                 android:layout_below="@+id/i_text_descripcio"
                 android:layout_marginTop="42dp"
-                android:text="@string/desconegut"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:text="@string/desconegut" />
 
             <CheckBox
                 android:id="@+id/i_check_male"
@@ -240,8 +241,8 @@
                 android:layout_alignBottom="@+id/sexe"
                 android:layout_alignLeft="@+id/anys"
                 android:layout_alignStart="@+id/anys"
-                android:text="@string/mascle"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:text="@string/mascle" />
         </RelativeLayout>
     </ScrollView>
 

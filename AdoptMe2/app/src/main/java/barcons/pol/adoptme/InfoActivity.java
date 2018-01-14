@@ -1,5 +1,6 @@
 package barcons.pol.adoptme;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
@@ -95,17 +95,6 @@ public class InfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String ad= intent.getStringExtra("ad"); // id de l'anunci
         //Obtenir els valors d'un anunci dins d'un object Ad per mostrar-ho.
-        ImgRef = StorageRef.child(ad);
-
-        //Col·loquem la imatge guardada al Firebase storage al imageView
-        ImgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //String url = uri.toString();
-                new DownloadImage().execute(uri);
-            }
-        });
-
 
         //llegim un únic cop el contingut de la base de dades de l'anunci corresponent a l'id proporcionat.
         AdsRef.child(ad).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -131,9 +120,16 @@ public class InfoActivity extends AppCompatActivity {
                         text_telf.setText(String.valueOf(usuari.phone));
 
                         String auxedat = String.valueOf(anunci.edat.known);
-                        if (auxedat=="-1") {
+                        if (auxedat.equals("-1")) {
                             text_edat.setText("-");
                         }else{text_edat.setText(auxedat);}
+
+                        //Carreguem la imatge
+                        Glide.with(InfoActivity.this)
+                                .load(anunci.url)
+                                .centerCrop()
+                                .error(R.drawable.common_google_signin_btn_icon_dark)
+                                .into(showimg);
 
                     }
 
@@ -157,6 +153,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     //Asynctask per descarregar la imatge des de l'url
+    @SuppressLint("StaticFieldLeak")
     public class DownloadImage extends AsyncTask<Uri, Void, String> {
         private static final String TAG = "DownloadImage";
         @Override
@@ -168,7 +165,12 @@ public class InfoActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result){
             if(result!=null){
-               Picasso.with(InfoActivity.this).load(result).into(showimg);
+                Glide.with(InfoActivity.this)
+                        .load(result)
+                        .centerCrop()
+                        .error(R.drawable.common_google_signin_btn_icon_dark)
+                        .into(showimg);
+
             }
             else Log.i(TAG,"Could not set the image");
         }

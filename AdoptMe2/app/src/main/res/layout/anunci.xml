@@ -1,86 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/txt_anunci"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="0.28"
-        android:text="TextView"
-        android:textAlignment="viewStart"
-        android:textSize="18sp" />
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/txt_anunci"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.28"
+            android:text="TextView"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_data"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txt_anunci"
+            android:layout_alignBottom="@+id/txt_anunci"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="start"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_weight="0.28"
+            android:text="TextView"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
     <!-- canviar layout width a 400dp si hi han problemes -->
+
     <ImageView
         android:id="@+id/img_anunci"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="350dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeLayout"
         android:adjustViewBounds="false"
         app:srcCompat="@drawable/common_full_open_on_phone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_anunci"
         android:orientation="horizontal"
         android:weightSum="1">
+
+        <Button
+            android:id="@+id/btn_editar"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:layout_toEndOf="@+id/btn_info"
+            android:layout_toRightOf="@+id/btn_info"
+            android:text="EDIT" />
 
         <Button
             android:id="@+id/btn_info"
             android:layout_width="37dp"
             android:layout_height="37dp"
-            android:layout_marginLeft="27dp"
-            android:layout_marginTop="-3dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
             android:background="@drawable/button_style"
             android:onClick="showinfo" />
 
-        <RelativeLayout
-            android:layout_width="195dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.79"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/btn_borrar"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="59dp"
-                android:layout_marginStart="59dp"
-                android:layout_toEndOf="@+id/btn_editar"
-                android:layout_toRightOf="@+id/btn_editar"
-                android:text="DELETE" />
-
-            <Button
-                android:id="@+id/btn_editar"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="28dp"
-                android:layout_marginStart="28dp"
-                android:text="EDIT" />
-        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_borrar"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_toEndOf="@+id/btn_editar"
+            android:layout_toRightOf="@+id/btn_editar"
+            android:text="DELETE" />
 
         <CheckBox
             android:id="@+id/chk_anunci"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
             android:button="@drawable/save_selector"
             android:clickable="true"
             android:focusable="false"
             android:textSize="16sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

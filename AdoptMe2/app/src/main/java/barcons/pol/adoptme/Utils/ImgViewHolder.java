@@ -15,6 +15,7 @@ import barcons.pol.adoptme.R;
 
 public class ImgViewHolder extends RecyclerView.ViewHolder {
     public TextView nameView;
+    public TextView dateView;
     public ImageView imageView;
     public CheckBox saveCheck;
     public Button btn_info;
@@ -25,6 +26,7 @@ public class ImgViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         nameView = (TextView) itemView.findViewById(R.id.txt_anunci);
+        dateView = (TextView)itemView.findViewById(R.id.text_data);
         imageView = (ImageView) itemView.findViewById(R.id.img_anunci);
         saveCheck =(CheckBox)itemView.findViewById(R.id.chk_anunci);
         btn_info = (Button) itemView.findViewById(R.id.btn_info);

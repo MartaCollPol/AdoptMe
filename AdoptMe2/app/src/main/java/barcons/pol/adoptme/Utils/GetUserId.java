@@ -3,7 +3,10 @@ package barcons.pol.adoptme.Utils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,6 +47,7 @@ public class GetUserId {
     private CheckBox mSavecheck;
     private String mAdkey;
     private RecyclerView rcvListImg;
+
 
 
     public GetUserId(Context mContext,String mDeviceid,CheckBox mSavecheck,String mAdkey) {
@@ -140,6 +144,7 @@ public class GetUserId {
             });
         }
     }
+
     //constructor : device, mContext
     public void ShowAds(Query query){
         mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
@@ -173,11 +178,17 @@ public class GetUserId {
         rcvListImg.setHasFixedSize(false);
         rcvListImg.setLayoutManager(layoutManager);
 
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
+
         //TODO: Afegir un divisor "gris" com el de la app Reddit entre els anuncis, i un marge al final : https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
 
+        rcvListImg.addItemDecoration(itemDecoration);
         rcvListImg.setAdapter(mAdapter);
 
+
+
     }
+
 
 
 

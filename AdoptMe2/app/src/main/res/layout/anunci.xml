@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -66,15 +67,14 @@
 
         <Button
             android:id="@+id/btn_editar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="35dp"
-            android:layout_marginStart="35dp"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/btn_info"
             android:layout_toRightOf="@+id/btn_info"
-            android:background="@drawable/ic_action_name"
-             />
+            android:background="@drawable/ic_lapiz" />
 
         <Button
             android:id="@+id/btn_info"
@@ -90,15 +90,14 @@
 
         <Button
             android:id="@+id/btn_borrar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="22dp"
-            android:layout_marginStart="22dp"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp"
             android:layout_toEndOf="@+id/btn_editar"
             android:layout_toRightOf="@+id/btn_editar"
-            android:background="@drawable/ic_delete"
-             />
+            android:background="@drawable/ic_papelera" />
 
         <CheckBox
             android:id="@+id/chk_anunci"

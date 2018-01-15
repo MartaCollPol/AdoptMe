@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rcvListImg;
     private String deviceId;
     String code;
+    private boolean notsearch=false;
 
 
     @Override
@@ -67,11 +68,19 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem register = menu.findItem(R.id.action_filtra);
+        register.setVisible(!notsearch);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_filtra: //TODO: setVisibility 0 quan estem a home o saved.
+            case R.id.action_filtra:
                 startActivityForResult(new Intent(this, FiltraActivity.class),CODE_FILTRAACTIVITY);
                 return true;
         }
@@ -104,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: Afegir que al tornar enrere d'una activitat estigui seleccionat el mateix menu search/save/home que estaba al marxar
         //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també,
         // per a APIs inferiors a la 23 aquest permis s'activa permenentment en la instalació
         starterintent = getIntent();
@@ -169,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
             rcvListImg = (RecyclerView) findViewById(R.id.recyclerview);
 
             final GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
@@ -183,14 +190,20 @@ public class MainActivity extends AppCompatActivity {
 
                         case R.id.action_search:
                             DisplayAds.ShowAds(AdsRef.limitToLast(100));
+                            notsearch=false;
+                            invalidateOptionsMenu();
                             return true;
 
                         case R.id.action_save:
                             DisplayAds.GetUser(2);
+                            notsearch=true;
+                            invalidateOptionsMenu();
                             return true;
 
                         case R.id.action_home:
                             DisplayAds.GetUser(3);
+                            notsearch=true;
+                            invalidateOptionsMenu();
                             return true;
 
                     }

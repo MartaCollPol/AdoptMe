@@ -31,7 +31,7 @@ import barcons.pol.adoptme.Utils.FirebaseReferences;
  *
  */
 
- //TODO: mostra distància, boto per tornar enrere
+ //TODO: mostra distància
 public class InfoActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -62,10 +62,6 @@ public class InfoActivity extends AppCompatActivity {
             case android.R.id.home:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-
-
-
-
         }
         return true;
     }
@@ -130,7 +126,6 @@ public class InfoActivity extends AppCompatActivity {
                                 .centerCrop()
                                 .error(R.drawable.common_google_signin_btn_icon_dark)
                                 .into(showimg);
-
                     }
 
                     @Override
@@ -139,7 +134,6 @@ public class InfoActivity extends AppCompatActivity {
                     }
 
                 });
-
             }
 
             @Override
@@ -148,8 +142,6 @@ public class InfoActivity extends AppCompatActivity {
             }
 
         });
-
-
     }
 
     //Asynctask per descarregar la imatge des de l'url

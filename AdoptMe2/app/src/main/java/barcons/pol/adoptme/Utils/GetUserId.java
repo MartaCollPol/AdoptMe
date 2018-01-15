@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.bumptech.glide.Glide;
+import com.firebase.geofire.GeoFire;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import barcons.pol.adoptme.CreaActivity;
 import barcons.pol.adoptme.InfoActivity;
@@ -127,7 +133,6 @@ public class GetUserId {
                         Log.e(TAG, "User not found");
                         Snackbar.make(mView, R.string.usrnotfound, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
-                        //TODO: S'hauria de canviar el main a coordinatorlayout i passar-ho per referència per tenir un Snackbar (mirar creaActivity).
                     }else Log.e("GetUserId","User not found");
                 }
             }
@@ -153,6 +158,9 @@ public class GetUserId {
                     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
                     StorageReference fileRef = StorageRef.child(adkey);
                     fileRef.delete();
+                    DatabaseReference GeoRef = database.getReference("geofire");
+                    GeoFire geoFire = new GeoFire(GeoRef);
+                    geoFire.removeLocation(adkey); //borrem la localització
                     AdsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -234,6 +242,69 @@ public class GetUserId {
         ClearedFirst(query);
     }
 
+    private void NeedsADelete(String data, final String adkey){
+        Calendar current = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.FRENCH);
+        String currentdata = df.format(current.getTime());
+        Date currDate = null;
+        try {
+            currDate = df.parse(currentdata);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date strDate = null;
+        try {
+            strDate = df.parse(data);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar toCompare = Calendar.getInstance();
+        toCompare.setTime(strDate);
+        current.setTime(currDate);
+
+        int monthsBetween = 0;
+        int dateDiff = toCompare.get(Calendar.DAY_OF_MONTH)-current.get(Calendar.DAY_OF_MONTH);
+
+        if(dateDiff<0) {
+            int borrow = toCompare.getActualMaximum(Calendar.DAY_OF_MONTH);
+            dateDiff = (toCompare.get(Calendar.DAY_OF_MONTH)+borrow)-current.get(Calendar.DAY_OF_MONTH);
+            monthsBetween--;
+
+            if(dateDiff>0) {
+                monthsBetween++;
+            }
+        }
+        else {
+            monthsBetween++;
+        }
+        monthsBetween += toCompare.get(Calendar.MONTH)-current.get(Calendar.MONTH);
+        monthsBetween  += (toCompare.get(Calendar.YEAR)-current.get(Calendar.YEAR))*12;
+
+        if(monthsBetween>=6){
+            StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference fileRef = StorageRef.child(adkey);
+            fileRef.delete(); //borrem la imatge de l'storage
+            DatabaseReference GeoRef = database.getReference("geofire");
+            GeoFire geoFire = new GeoFire(GeoRef);
+            geoFire.removeLocation(adkey); //borrem la localització
+            //borrem l'anunci del DB
+            AdsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(adkey)){
+                        AdsRef.child(adkey).removeValue();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("GetUserId/Delete","DatabaseError");
+                }
+            });
+        }
+
+    }
+
     public void ClearedFirst(Query query){
         mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
                 Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
@@ -242,6 +313,7 @@ public class GetUserId {
                 GetUserId NeedsCheck = new GetUserId(viewHolder.saveCheck,model.saved,mDeviceid);
                 NeedsCheck.GetUser(4);
 
+                NeedsADelete(model.data,getRef(position).getKey());
                 GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
                 EditAndDelete.GetUser(5);
                 viewHolder.dateView.setText(model.data);

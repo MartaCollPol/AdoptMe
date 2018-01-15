@@ -55,8 +55,8 @@ import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GPSTracker;
 
 
-//TODO: Fer que sigui obligatori omplir els camps
-// /TODO: afegir el camp query al guardar l anunci
+
+
 public class CreaActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -66,7 +66,6 @@ public class CreaActivity extends AppCompatActivity {
     DatabaseReference AdExistsRef;
     DatabaseReference newRef;
     StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
-
 
     DatabaseReference UserRef;
     DatabaseReference CreatedRef;
@@ -112,48 +111,67 @@ public class CreaActivity extends AppCompatActivity {
 
             case R.id.action_OK:
                 boolean flag = false;
-                if(!ImgExistFlag){
+                if (!ImgExistFlag) {
                     flag = true;
                     Snackbar.make(coordinatorLayout, R.string.missingimg, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                }if(text_desc.getText().toString().trim().equals("...") || text_desc.getText().toString().trim().equals("...")) {
+                }
+                if (text_desc.getText().toString().trim().equals("...") || text_desc.getText().toString().trim().equals("...")) {
                     flag = true;
                     text_desc.requestFocus();
                     text_desc.setError(getString(R.string.omple));
-                }if((desconegut.isChecked())||!(text_edat.getText().toString().trim().equals(""))) {
-                desconegut.setError(null);
-                }else{
+                }
+                if ((desconegut.isChecked()) || !(text_edat.getText().toString().trim().equals(""))) {
+                    desconegut.setError(null);
+                } else {
                     flag = true;
                     desconegut.requestFocus();
                     desconegut.setError("");
-                }if(text_nom.getText().toString().trim().equals("")){
+                }
+                if (text_nom.getText().toString().trim().equals("")) {
                     flag = true;
                     text_nom.requestFocus();
                     text_nom.setError(getString(R.string.omple));
-                }if(text_email.getText().toString().trim().equals("")){
+                }
+                if (text_email.getText().toString().trim().equals("")) {
                     flag = true;
                     text_email.requestFocus();
                     text_email.setError(getString(R.string.omple));
-                }if(text_telf.getText().toString().trim().equals("")){
+                }
+                if (!text_email.getText().toString().contains("@") ||
+                        !text_email.getText().toString().contains(".")) {
+                    flag = true;
+                    text_email.requestFocus();
+                    text_email.setError(getString(R.string.omple));
+                }
+                if (text_telf.getText().toString().trim().equals("")) {
                     flag = true;
                     text_telf.requestFocus();
                     text_telf.setError(getString(R.string.omple));
-            }if((female.isChecked())||(male.isChecked())) {
-                female.setError(null);
-            }else{
-                flag = true;
-                female.setError("");
-            }
-            if(flag == false){
-                GPSTracker mGPS = new GPSTracker(this);
-                if(mGPS.canGetLocation ){
-                    CreaAnunci(); //GuardaLoc esta a dins de CreaAnunci();
-                    finish();
-                }else {
-                    buildAlertMessageNoGps();
                 }
-            }
+                if (text_telf.getText().toString().length() > 9 ||
+                        text_telf.getText().toString().length()<9) {
+                    flag = true;
+                    text_telf.requestFocus();
+                    text_telf.setError(getString(R.string.omple));
+                }
+                if ((female.isChecked()) || (male.isChecked())) {
+                    female.setError(null);
+                } else {
+                    flag = true;
+                    female.setError("");
+                }
+                if (!flag) {
+                    GPSTracker mGPS = new GPSTracker(this);
+                    if (mGPS.canGetLocation) {
+                        CreaAnunci(); //GuardaLoc esta a dins de CreaAnunci();
+                        finish();
+                    } else {
+                        buildAlertMessageNoGps();
+                    }
+                }
+                break;
         }
         return true;
     }
@@ -297,6 +315,8 @@ public class CreaActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
@@ -304,9 +324,9 @@ public class CreaActivity extends AppCompatActivity {
     private void CreaAnunci(){
 
         Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy",Locale.FRENCH);
         String data = df.format(c.getTime());
+
         String query;
 
         anunci.user = us;
@@ -320,9 +340,10 @@ public class CreaActivity extends AppCompatActivity {
         }
         //Per a numeros '-1' serà l'equivalent al valor 'null'
         String edat = text_edat.getText().toString();
-        if (edat.equals("")) {
-            edat = "-1";
-        }
+        if(!edat.equals("") && Integer.parseInt(edat)<0) edat="0";
+        else if (edat.equals("")) edat = "-1";
+        else if(Integer.parseInt(edat)>20) edat = "20";
+
         String auxedat;
         if(Integer.parseInt(edat)>=10){
             auxedat="d"+edat;
@@ -339,7 +360,6 @@ public class CreaActivity extends AppCompatActivity {
         usuari.phone = Long.parseLong(text_telf.getText().toString());
 
         final String TAG = "FirebaseStorage";
-        //TODO: comprobar que el telf tingui format de telf, email igual i que l'edat màxima sigui 20 anys.
         if(ad.equals("Void")) {
             newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
             adkey = newRef.getKey();
@@ -395,8 +415,6 @@ public class CreaActivity extends AppCompatActivity {
                 AdExistsRef.updateChildren(UpdateAd);
                 GuardaLoc(ad);
             }
-
-
         }
 
         //fem un update de l'usuari en cas de que hagin canviat valors en algun dels camps de l'usuari
@@ -419,7 +437,7 @@ public class CreaActivity extends AppCompatActivity {
     private void GuardaLoc(String adloc){
         GPSTracker mGPS = new GPSTracker(this);
         DatabaseReference GeoRef = database.getReference("geofire");
-        GeoFire geoFire = new GeoFire(GeoRef); //ref -> FirebaseReference que apunta a geofire.
+        GeoFire geoFire = new GeoFire(GeoRef);
         GeoLocation currentlocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
         geoFire.setLocation(adloc,currentlocation);
     }
@@ -489,23 +507,8 @@ public class CreaActivity extends AppCompatActivity {
         );}catch (IOException e){
             Log.i("CreateImageFile","Failed on creating Temp File");
         }
-
-        // Save a file: path for use with ACTION_VIEW intents
-        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
 
-
-
-    /*
-       afegir
-    //Afegeix la imatge a la galeria del dispositiu - no furula perq per ara les imatges es guarden al directori
-    //Retornat per getExternalFilesDir el qual el mediaScan no el llegeix ja que és privat per l'app
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(uri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-    */
 
 }

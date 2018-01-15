@@ -383,7 +383,8 @@ public class GetUserId {
                                                                                     location.longitude,
                                                                                     distance);
                                             float disInKm = distance[0]/1000;
-                                            String sDist = String.valueOf(disInKm);
+                                            String sDist = String.format("%.2f", disInKm);
+                                           // String sDist = String.valueOf(disInKm);
                                             text.setText(sDist + " Km");
                                         } else {
                                                 System.out.println(String.format("There is no location for key %s in GeoFire", key));

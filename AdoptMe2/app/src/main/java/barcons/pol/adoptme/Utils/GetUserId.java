@@ -3,6 +3,7 @@ package barcons.pol.adoptme.Utils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,9 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +62,9 @@ public class GetUserId {
     private Button mDelete;
     private Button mEdit;
     private String mUserToCompare;
+
+    DatabaseReference GeoRef = database.getReference("geofire");
+    GeoFire geoFire = new GeoFire(GeoRef);
 
     private GetUserId(Button mDelete, Button mEdit, String mUserToCompare,String mDeviceid,String mAdkey,Context mContext){
         this.mDelete = mDelete;
@@ -317,7 +324,7 @@ public class GetUserId {
                 GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
                 EditAndDelete.GetUser(5);
                 viewHolder.dateView.setText(model.data);
-                viewHolder.nameView.setText(model.sexe);
+                knowDistance(getRef(position).getKey(),viewHolder.nameView);
                 Glide.with(mContext)
                         .load(model.url)
                         .centerCrop()
@@ -361,5 +368,33 @@ public class GetUserId {
         mContext.startActivity(intent);
     }
 
+    private void knowDistance(String adloc, final TextView text){
+                GPSTracker mGPS = new GPSTracker(mContext);
+                final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
+                final float[] distance= new float[5];
+
+            geoFire.getLocation(adloc, new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                                        if (location != null) {
+                                                Location.distanceBetween (crntLocation.latitude,
+                                                                                   crntLocation.longitude,
+                                                                                    location.latitude,
+                                                                                    location.longitude,
+                                                                                    distance);
+                                            float disInKm = distance[0]/1000;
+                                            String sDist = String.valueOf(disInKm);
+                                            text.setText(sDist + " Km");
+                                        } else {
+                                                System.out.println(String.format("There is no location for key %s in GeoFire", key));
+                                        }
+            }
+                @Override
+           public void onCancelled(DatabaseError databaseError) {
+                                      System.err.println("There was an error getting the GeoFire location: " + databaseError);
+            }
+       });
+
+    }
 
 }

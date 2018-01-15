@@ -67,13 +67,14 @@
         <Button
             android:id="@+id/btn_editar"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="35dp"
             android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/btn_info"
             android:layout_toRightOf="@+id/btn_info"
-            android:text="EDIT" />
+            android:background="@drawable/ic_action_name"
+             />
 
         <Button
             android:id="@+id/btn_info"
@@ -90,13 +91,14 @@
         <Button
             android:id="@+id/btn_borrar"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="22dp"
             android:layout_marginStart="22dp"
             android:layout_toEndOf="@+id/btn_editar"
             android:layout_toRightOf="@+id/btn_editar"
-            android:text="DELETE" />
+            android:background="@drawable/ic_delete"
+             />
 
         <CheckBox
             android:id="@+id/chk_anunci"

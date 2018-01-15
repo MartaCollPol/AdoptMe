@@ -10,27 +10,21 @@ import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.florescu.android.rangeseekbar.RangeSeekBar;
-
-import barcons.pol.adoptme.Utils.FirebaseReferences;
 
 
 public class FiltraActivity extends AppCompatActivity {
 
-    CheckBox loc;
+    CheckBox Loc;
     CheckBox Sexe;
     CheckBox Edat;
     CheckBox mascle;
     CheckBox femella;
-    CheckBox desc;
+    CheckBox desc; //desconegut
     RangeSeekBar<Integer> edat_bar;
     private SeekBar loc_bar;
     private TextView valor_km;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+
 
     int km = 10;
     int edatMin;
@@ -48,29 +42,43 @@ public class FiltraActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+
             case R.id.action_OK:
-                String code=null;
-                Intent data = new Intent();
-                if(mascle.isChecked()){
-                    code="0"; //TODO: pensar millor, querys complexes
-                }
-                else if(femella.isChecked()){
-                    code="1";
-                    //query=QueryMF("sexe","female");
-                }
-                else if(Edat.isChecked()){
-                    if(desc.isChecked()){
-                        code="2";//query=AdsRef.orderByChild("edat/unknown").equalTo(true);
-                    }
-                    if(edat_bar.getAbsoluteMaxValue()!=edatMax || edat_bar.getAbsoluteMinValue()!=edatMin){
+                String code="17"; //Res seleccionat
+
+                Intent data = new Intent(this,MainActivity.class);
+                if(femella.isChecked()&&!Loc.isChecked() && !Edat.isChecked()) code="0";
+                else if(mascle.isChecked()&&!Loc.isChecked() && !Edat.isChecked())code="1";
+                else if(Edat.isChecked()&&!Sexe.isChecked() && !Loc.isChecked()){
+                    if(desc.isChecked()) code="2";
+                    else{
                         code="3";
-                        data.putExtra("EdatMin",edatMin);
-                        data.putExtra("EdatMax",edatMax);
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
                     }
                 }
-                else if(loc.isChecked()){
+                else if(Loc.isChecked()&&!Sexe.isChecked() && !Edat.isChecked()){
                     code="4";
                     data.putExtra("Km",km);
+                }
+                else if(femella.isChecked()&& Edat.isChecked()&&!Loc.isChecked()){
+                    if(desc.isChecked()) code="5";
+                    else {
+                        code="6";
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
+                    }
+                }
+                else if(mascle.isChecked()&& Edat.isChecked()&& !Loc.isChecked()){
+                    if(desc.isChecked()) code="7";
+                    else{
+                        code="8";
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
+                    }
                 }
 
                 data.putExtra("Codi", code);
@@ -91,7 +99,7 @@ public class FiltraActivity extends AppCompatActivity {
         loc_bar = (SeekBar) findViewById(R.id.loc_bar);
         valor_km = (TextView) findViewById(R.id.valor_km);
 
-        loc = (CheckBox)findViewById(R.id.filtra_loc);
+        Loc = (CheckBox)findViewById(R.id.filtra_loc);
         Edat = (CheckBox)findViewById(R.id.filtra_edat);
         Sexe = (CheckBox)findViewById(R.id.filtra_sexe);
         mascle = (CheckBox)findViewById(R.id.sexe_mascle);
@@ -117,6 +125,7 @@ public class FiltraActivity extends AppCompatActivity {
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar,Integer minValue, Integer maxValue) {
                 edatMin=minValue;
                 edatMax=maxValue;
+                desc.setChecked(false);
             }
 
         });
@@ -165,14 +174,13 @@ public class FiltraActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Edat.isChecked()) {
                     desc.setEnabled(true);
-                    FiltraActivity.this.edat_bar.setEnabled(true);
-
+                    edat_bar.setEnabled(true);
                 }
                 if (!(Edat.isChecked())){
                     desc.setChecked(false);
                     desc.setEnabled(false);
-                    FiltraActivity.this.edat_bar.setEnabled(false);
-                    FiltraActivity.this.edat_bar.resetSelectedValues();
+                    edat_bar.setEnabled(false);
+                    edat_bar.resetSelectedValues();
                 }
             }
         });
@@ -191,20 +199,29 @@ public class FiltraActivity extends AppCompatActivity {
                 }
             }
         });
-        loc.setOnClickListener(new View.OnClickListener() {
+        Loc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (loc.isChecked()) {
+                if (Loc.isChecked()) {
                     loc_bar.setEnabled(true);
 
                 }
-                if (!(loc.isChecked())){
+                if (!(Loc.isChecked())){
                     loc_bar.setEnabled(false);
                     loc_bar.setProgress(10);
 
                 }
             }
         });
+        desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(desc.isChecked()){
+                    edat_bar.resetSelectedValues();
+                }
+            }
+        });
+
 
     }
     //Fem que només un dels checkbox estigui activat al mateix temps

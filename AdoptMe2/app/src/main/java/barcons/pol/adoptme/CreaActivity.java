@@ -56,7 +56,7 @@ import barcons.pol.adoptme.Utils.GPSTracker;
 
 
 //TODO: Fer que sigui obligatori omplir els camps
-// /TODO: guardar url a la base de dades i mostrar la imatge
+// /TODO: afegir el camp query al guardar l anunci
 public class CreaActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -307,17 +307,29 @@ public class CreaActivity extends AppCompatActivity {
         System.out.println("Current time => " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy",Locale.FRENCH);
         String data = df.format(c.getTime());
+        String query;
 
         anunci.user = us;
         anunci.data = data;
         if (female.isChecked()) {
             anunci.sexe = "female";
-        } else anunci.sexe = "male";
+            query="F_";
+        } else {
+            anunci.sexe = "male";
+            query="M_";
+        }
         //Per a numeros '-1' serà l'equivalent al valor 'null'
         String edat = text_edat.getText().toString();
         if (edat.equals("")) {
             edat = "-1";
         }
+        String auxedat;
+        if(Integer.parseInt(edat)>=10){
+            auxedat="d"+edat;
+        }else auxedat=edat;
+
+        query=query+auxedat;
+        anunci.query=query;
         anunci.edat = new edat(Integer.parseInt(edat), desconegut.isChecked());
         anunci.desc = text_desc.getText().toString();
 
@@ -327,8 +339,8 @@ public class CreaActivity extends AppCompatActivity {
         usuari.phone = Long.parseLong(text_telf.getText().toString());
 
         final String TAG = "FirebaseStorage";
-
-        if(ad.equals(null)) {
+        //TODO: comprobar que el telf tingui format de telf, email igual i que l'edat màxima sigui 20 anys.
+        if(ad.equals("Void")) {
             newRef = AdsRef.push(); //creem una referència a la randomkey generada amb el push
             adkey = newRef.getKey();
             //Afegim la imatge fotografiada al Firebase Storage i li assignem el nom de l'anunci

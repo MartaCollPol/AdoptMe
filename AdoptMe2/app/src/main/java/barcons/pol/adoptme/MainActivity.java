@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
 import barcons.pol.adoptme.Utils.GetDeviceId;
 import barcons.pol.adoptme.Utils.GetUserId;
+import barcons.pol.adoptme.Utils.Queries;
 
 //import per obtenir l'id unic del dispositiu
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_filtra:
+            case R.id.action_filtra: //TODO: setVisibility 0 quan estem a home o saved.
                 startActivityForResult(new Intent(this, FiltraActivity.class),CODE_FILTRAACTIVITY);
                 return true;
         }
@@ -149,25 +150,25 @@ public class MainActivity extends AppCompatActivity {
                 if(deviceId==null){
                     Log.e("GetDeviceId/Main","Couldn't get the DeviceId");
                     finish();
+                }else {
+                    Query query = UsersRef.orderByChild("uid").equalTo(deviceId);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+                                Intent FirstTime=new Intent(MainActivity.this,FirstTimeActivity.class);
+                                FirstTime.putExtra("uid",deviceId);
+                                startActivity(FirstTime);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("FirstTimeQuery","DatabaseError");
+                        }
+                    });
                 }
             }
-            //asynck task, es podria fer sartActivity for result i continuar el programa en obtenir result==ok. Evitaria bugs al carregar la llista d'ads.
-            Query query = UsersRef.orderByChild("uid").equalTo(deviceId);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(!dataSnapshot.exists()){
-                        Intent FirstTime=new Intent(MainActivity.this,FirstTimeActivity.class);
-                        FirstTime.putExtra("uid",deviceId);
-                        startActivity(FirstTime);
-                    }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.e("FirstTimeQuery","DatabaseError");
-                }
-            });
 
             rcvListImg = (RecyclerView) findViewById(R.id.recyclerview);
 
@@ -221,10 +222,21 @@ public class MainActivity extends AppCompatActivity {
         }
         if(requestCode==CODE_FILTRAACTIVITY){
             if(resultCode==RESULT_OK){
-                code = data.getStringExtra("Codi");
-                if(code.equals(0)){
-                    //TODO: Filtratge.
+                String codi =data.getStringExtra("Codi");
+                String SedatMin = data.getStringExtra("EdatMin");
+                String SedatMax = data.getStringExtra("EdatMax");
+                int edatMin = -1;
+                int edatMax = -1;
+                if(SedatMin!=null){
+                    edatMin = Integer.parseInt(SedatMin);
+                    edatMax = Integer.parseInt(SedatMax);
                 }
+                GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
+                Queries Filtra = new Queries(codi,edatMin,edatMax);
+
+                Query query = Filtra.ResultQuery();
+                DisplayAds.ClearedFirst(query);
+
             }
         }
     }

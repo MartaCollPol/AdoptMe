@@ -15,6 +15,7 @@ public class Ad {
     public String url;
     public HashMap<String, Object> saved;
     public String data;
+    public String query;
 
 
 
@@ -23,13 +24,14 @@ public class Ad {
         // Default constructor required for calls to DataSnapshot.getValue(Ad.class)
     }
 
-    public Ad(String userid,int edatknown,boolean edatunknown, String sexe,String descripcio,String url,String data) {
+    public Ad(String userid,int edatknown,boolean edatunknown, String sexe,String descripcio,String url,String data,String query) {
         this.user = userid;
         this.desc = descripcio;
         this.edat = new edat(edatknown,edatunknown);
         this.sexe = sexe;
         this.url = url;
         this.data = data;
+        this.query = query;
 
     }
 

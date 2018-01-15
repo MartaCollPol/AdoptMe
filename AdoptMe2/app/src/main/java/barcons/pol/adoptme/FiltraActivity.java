@@ -48,6 +48,10 @@ public class FiltraActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+
             case R.id.action_OK:
                 String code=null;
                 Intent data = new Intent();

@@ -278,6 +278,7 @@ public class GetUserId {
 
         itemDecoration.setDrawable(Divider);
         rcvListImg.addItemDecoration(itemDecoration);
+
         rcvListImg.setAdapter(mAdapter);
 
     }

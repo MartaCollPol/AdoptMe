@@ -22,4 +22,8 @@
     <string name="missingimg">Falta la imagen</string>
     <string name="writenotallowed">La app no funciona sin los \"Write permissions\"</string>
     <string name="action_settings">Ajustes</string>
+    <string name="locationenable">Porfavor, active la localización o la distáncai no funcionará correctamente.</string>
+    <string name="locationcrea">Porfavor, active la localización para continuar</string>
+    <string name="title_location_permission">Permiso de localización</string>
+    <string name="text_location_permission">Active los permisos de localización para utilizar AdoptMe</string>
 </resources>

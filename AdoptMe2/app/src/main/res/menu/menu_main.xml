@@ -6,7 +6,7 @@
 
         android:id="@+id/action_filtra"
         android:title="@string/action_filtra"
-        android:icon="@drawable/ic_arrowdown"
+        android:icon="@drawable/ic_filtra"
         app:showAsAction="always|withText"
         android:showAsAction="always|withText"
         tools:ignore="AppCompatResource" />

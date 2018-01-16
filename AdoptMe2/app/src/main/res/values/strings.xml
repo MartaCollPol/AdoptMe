@@ -24,8 +24,10 @@
     <string name="next">NEXT</string>
     <string name="writenotallowed">The app will not work without Write permissions</string>
     <string name="locationenable">Please, turn on the location or the distance will not work propertly</string>
-    <string name="YES">OK</string>
-    <string name="NO">NO</string>
+    <string name="YES" translatable="false">OK</string>
+    <string name="NO" translatable="false">NO</string>
     <string name="locationcrea">Please, turn on the location to continue</string>
+    <string name="title_location_permission">Location permission</string>
+    <string name="text_location_permission">Turn on location permission to use AdoptMe</string>
 
 </resources>

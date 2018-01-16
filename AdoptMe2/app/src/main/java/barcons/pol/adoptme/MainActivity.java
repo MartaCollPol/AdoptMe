@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +26,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.Manifest;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -66,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
     private String deviceId;
     String code;
     private boolean notsearch=false;
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    String provider = locationManager.getBestProvider(new Criteria(), false);
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

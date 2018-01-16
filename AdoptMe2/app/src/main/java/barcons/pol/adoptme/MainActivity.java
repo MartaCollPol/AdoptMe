@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 Settings.System.ACCELEROMETER_ROTATION, 0);
     }
 
-    //ho utilitzem per a poder fer servir el FirebaseStorage. Tots els usuaris seran anonims.
+    //ho utilitzem per a poder fer servir el FirebaseStorage. Tots els usuaris seran anonims.  
     private void signInAnonymously() {
         final String TAG = "AnonymousAuth";
         mAuth.signInAnonymously()

@@ -86,6 +86,7 @@ public class CreaActivity extends AppCompatActivity {
 
     ImageView imageView;
 
+
     String us;
     String ad;
     static String adkey;
@@ -175,15 +176,6 @@ public class CreaActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                imageView.setClickable(true);
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -442,14 +434,14 @@ public class CreaActivity extends AppCompatActivity {
   protected void buildAlertMessageNoGps() {
 
       final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage("Please Turn ON your GPS Connection")
+      builder.setMessage(R.string.locationcrea)
               .setCancelable(false)
-              .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              .setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
                   public void onClick(final DialogInterface dialog, final int id) {
                       startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                   }
               })
-              .setNegativeButton("No", new DialogInterface.OnClickListener() {
+              .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
                   public void onClick(final DialogInterface dialog, final int id) {
                       dialog.cancel();
                   }

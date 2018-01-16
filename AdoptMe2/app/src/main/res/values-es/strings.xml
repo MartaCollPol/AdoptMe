@@ -2,7 +2,7 @@
 <resources>
     <string name="descripcio">Descripción</string>
     <string name="edat">Edad</string>
-    <string name="anys">Anys</string>
+    <string name="anys">Años</string>
     <string name="desconegut">Desconocido</string>
     <string name="sexe">Sexo</string>
     <string name="mascle">Macho</string>
@@ -12,7 +12,6 @@
     <string name="nom">Nombre</string>
     <string name="telefon">Teléfono</string>
     <string name="email">Email</string>
-    <string name="action_OK">OK</string>
     <string name="action_filtra">Filtra</string>
     <string name="localització">Localización</string>
     <string name="cognom">Apellido</string>
@@ -22,8 +21,5 @@
     <string name="missingimg">Falta la imagen</string>
     <string name="writenotallowed">La app no funciona sin los \"Write permissions\"</string>
     <string name="action_settings">Ajustes</string>
-    <string name="locationenable">Porfavor, active la localización o la distáncai no funcionará correctamente.</string>
-    <string name="locationcrea">Porfavor, active la localización para continuar</string>
-    <string name="title_location_permission">Permiso de localización</string>
-    <string name="text_location_permission">Active los permisos de localización para utilizar AdoptMe</string>
+    <string name="locationnotallowed">Porfavor, active la localización o la distáncai no funcionará correctamente.</string>
 </resources>

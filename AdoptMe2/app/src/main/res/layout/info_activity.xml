@@ -19,17 +19,6 @@
             android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/km"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/distancia"
-                android:layout_alignBottom="@+id/distancia"
-                android:layout_toEndOf="@+id/anys"
-                android:layout_toRightOf="@+id/anys"
-                android:text="km"
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,11 +99,10 @@
                 android:id="@+id/i_text_distancia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/km"
-                android:layout_alignBottom="@+id/km"
+                android:layout_above="@+id/contacte"
                 android:layout_alignLeft="@+id/i_check_male"
                 android:layout_alignStart="@+id/i_check_male"
-                android:text="12"
+                android:text="-"
                 android:textSize="18sp" />
 
             <TextView

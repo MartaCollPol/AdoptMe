@@ -2,12 +2,15 @@ package barcons.pol.adoptme;
 
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -38,9 +41,12 @@ public class FirstTimeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String nameToSave = nom.getText().toString()+" "+ cognom.getText().toString();
                 User user = new User(nameToSave,uid);
-                UsersRef.push().setValue(user);
-
-               finish();
+                UsersRef.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        finish();
+                    }
+                });
             }
         });
 

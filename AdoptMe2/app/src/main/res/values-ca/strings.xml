@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="desconegut">Desconegut</string>
+    <string name="sexe">Sexe</string>
+    <string name="mascle">Mascle</string>
+    <string name="femella">Femella</string>
+    <string name="distancia">Distància</string>
+    <string name="contacte">Info de contacte:</string>
+    <string name="nom">Nom</string>
+    <string name="telefon">Telèfon</string>
+    <string name="email">Email</string>
+    <string name="action_filtra">Filtra</string>
+    <string name="localització">Localització</string>
+    <string name="omple">Omple els camps buits</string>
+    <string name="missingimg">Falta la imatge</string>
+    <string name="usrnotfound">Usuari inexistent</string>
+    <string name="cognom">Cognom</string>
+    <string name="next">Següent</string>
+    <string name="writenotallowed">L\'app no funcionarà sense permisos d\'escriptura</string>
+    <string name="locationnotallowed">Permisos de localització denegats</string>
+    <string name="action_settings">Eines</string>
+    <string name="descripcio">Descripció</string>
+    <string name="edat">Edat</string>
+    <string name="anys">Anys</string>
+</resources>

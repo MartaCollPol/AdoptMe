@@ -23,5 +23,9 @@
     <string name="cognom">Surname</string>
     <string name="next">NEXT</string>
     <string name="writenotallowed">The app will not work without Write permissions</string>
+    <string name="locationenable">Please, turn on the location or the distance will not work propertly</string>
+    <string name="YES">OK</string>
+    <string name="NO">NO</string>
+    <string name="locationcrea">Please, turn on the location to continue</string>
 
 </resources>

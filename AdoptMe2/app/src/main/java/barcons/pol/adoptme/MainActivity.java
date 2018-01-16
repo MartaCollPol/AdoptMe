@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private String deviceId;
     String code;
     private boolean notsearch=false;
-    SwipeRefreshLayout swipeLayout;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

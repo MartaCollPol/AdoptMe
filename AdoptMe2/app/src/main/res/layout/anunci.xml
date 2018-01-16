@@ -23,7 +23,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_weight="0.28"
-            android:text="TextView"
             android:textAlignment="viewStart"
             android:textSize="18sp" />
 

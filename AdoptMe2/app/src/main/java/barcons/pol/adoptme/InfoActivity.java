@@ -1,9 +1,7 @@
 package barcons.pol.adoptme;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,24 +12,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
 import barcons.pol.adoptme.Utils.FirebaseReferences;
+import barcons.pol.adoptme.Utils.GPSTracker;
 
 /**
  * Created by Marta on 08/12/2017.
  *
  */
 
- //TODO: mostra distància
 public class InfoActivity extends AppCompatActivity {
 
     //Referències a la base de dades del Firebase
@@ -60,8 +60,7 @@ public class InfoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
+                finish();
         }
         return true;
     }
@@ -80,17 +79,16 @@ public class InfoActivity extends AppCompatActivity {
         final TextView text_nom = (TextView)findViewById(R.id.i_text_nom);
         final TextView text_email = (TextView)findViewById(R.id.i_text_email);
         final TextView text_telf = (TextView)findViewById(R.id.i_text_telefon);
+        final TextView text_distancia =(TextView)findViewById(R.id.i_text_distancia);
 
         final CheckBox desconegut = (CheckBox)findViewById(R.id.i_check_desconegut);
         final CheckBox famella = (CheckBox)findViewById(R.id.i_check_female);
         final CheckBox mascle = (CheckBox)findViewById(R.id.i_check_male);
         showimg = (ImageView)findViewById(R.id.i_show_image);
 
-        StorageReference StorageRef = FirebaseStorage.getInstance().getReference();
 
         Intent intent = getIntent();
-        String ad= intent.getStringExtra("ad"); // id de l'anunci
-        //Obtenir els valors d'un anunci dins d'un object Ad per mostrar-ho.
+        final String ad= intent.getStringExtra("ad"); // id de l'anunci
 
         //llegim un únic cop el contingut de la base de dades de l'anunci corresponent a l'id proporcionat.
         AdsRef.child(ad).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -114,6 +112,7 @@ public class InfoActivity extends AppCompatActivity {
                         text_nom.setText(usuari.name);
                         text_email.setText(usuari.email);
                         text_telf.setText(String.valueOf(usuari.phone));
+                        DistanceToTextView(ad,text_distancia);
 
                         String auxedat = String.valueOf(anunci.edat.known);
                         if (auxedat.equals("-1")) {
@@ -143,7 +142,7 @@ public class InfoActivity extends AppCompatActivity {
 
         });
     }
-
+    /*
     //Asynctask per descarregar la imatge des de l'url
     @SuppressLint("StaticFieldLeak")
     public class DownloadImage extends AsyncTask<Uri, Void, String> {
@@ -166,6 +165,35 @@ public class InfoActivity extends AppCompatActivity {
             }
             else Log.i(TAG,"Could not set the image");
         }
+    } */
+
+    private void DistanceToTextView(String adloc, final TextView text){
+        GPSTracker mGPS = new GPSTracker(InfoActivity.this);
+        DatabaseReference GeoRef = database.getReference("geofire");
+        GeoFire geoFire = new GeoFire(GeoRef);
+        final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
+        final float[] distance= new float[5];
+        geoFire.getLocation(adloc, new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if (location != null) {
+                    Location.distanceBetween (crntLocation.latitude,
+                            crntLocation.longitude,
+                            location.latitude,
+                            location.longitude,
+                            distance);
+                    float disInKm = Math.round(distance[0]/1000);
+                    String sDist = String.valueOf(disInKm)+" Km";
+                    text.setText(sDist);
+                } else {
+                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("There was an error getting the GeoFire location: " + databaseError);
+            }
+        });
     }
 
 }

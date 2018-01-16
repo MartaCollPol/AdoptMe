@@ -23,7 +23,7 @@ public class Queries {
         this.mEdatMin=mEdatMin;
         this.mEdatMax=mEdatMax;
     }
-    //TODO: codi 4 localització. 9 famella i location ,10 mascle i location ,11 famella edat_kn i location,12 mascle edat_kn i location,13 famella edat_ukn i location
+
     //14 mascle edat_ukn i location,15 edat_kn i location,16 edat_unk i location
     public Query ResultQuery() {
         Log.e("mcoll","Query: "+mCodi);
@@ -45,13 +45,13 @@ public class Queries {
                 return AdsRef.orderByChild("edat/unknown").equalTo(true);
             case "3":
                 return AdsRef.orderByChild("edat/known").startAt(mEdatMin).endAt(mEdatMax);
-            case "5":
+            case "4":
                 return AdsRef.orderByChild("query").equalTo("F_-1");
-            case "6":
+            case "5":
                 return AdsRef.orderByChild("query").startAt("F_" + edatmin).endAt("F_" + edatmax);
-            case "7":
+            case "6":
                 return AdsRef.orderByChild("query").equalTo("M_-1");
-            case "8":
+            case "7":
                 Log.e("mcoll","Edat min"+mEdatMin);
                 Log.e("mcoll","Edat max"+mEdatMax);
                 return AdsRef.orderByChild("query").startAt("M_" + edatmin).endAt("M_" + edatmax);
@@ -60,6 +60,8 @@ public class Queries {
                 return AdsRef.limitToLast(100);
 
         }
-
     }
+
+
+
 }

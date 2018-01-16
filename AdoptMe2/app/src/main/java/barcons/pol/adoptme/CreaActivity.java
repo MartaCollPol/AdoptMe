@@ -106,8 +106,7 @@ public class CreaActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
+                finish();
 
             case R.id.action_OK:
                 boolean flag = false;
@@ -314,9 +313,6 @@ public class CreaActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
 

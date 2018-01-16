@@ -43,8 +43,7 @@ public class FiltraActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
+                finish();
 
             case R.id.action_OK:
                 String code="17"; //Res seleccionat
@@ -60,22 +59,62 @@ public class FiltraActivity extends AppCompatActivity {
                         data.putExtra("EdatMax",String.valueOf(edatMax));
                     }
                 }
-                else if(Loc.isChecked()&&!Sexe.isChecked() && !Edat.isChecked()){
-                    code="4";
-                    data.putExtra("Km",km);
-                }
                 else if(femella.isChecked()&& Edat.isChecked()&&!Loc.isChecked()){
-                    if(desc.isChecked()) code="5";
+                    if(desc.isChecked()) code="4";
                     else {
-                        code="6";
+                        code="5";
                         data.putExtra("EdatMin",String.valueOf(edatMin));
                         data.putExtra("EdatMax",String.valueOf(edatMax));
                     }
                 }
                 else if(mascle.isChecked()&& Edat.isChecked()&& !Loc.isChecked()){
-                    if(desc.isChecked()) code="7";
+                    if(desc.isChecked()) code="6";
                     else{
-                        code="8";
+                        code="7";
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
+                    }
+                }else if(Loc.isChecked()&&!Sexe.isChecked() && !Edat.isChecked()){
+                    data.putExtra("CodeLoc","1");
+                    data.putExtra("Km",String.valueOf(km));
+                }else if(Loc.isChecked() &&Sexe.isChecked() && !Edat.isChecked()){
+                    if(femella.isChecked()){
+                        data.putExtra("CodeLoc","2");
+                        data.putExtra("Km",String.valueOf(km));
+                    }else if(mascle.isChecked()){
+                        data.putExtra("CodeLoc","3");
+                        data.putExtra("Km",String.valueOf(km));
+                    }
+                }else if(Loc.isChecked() && !Sexe.isChecked() && Edat.isChecked()){
+                    if(desc.isChecked()) {
+                        data.putExtra("CodeLoc","4");
+                        data.putExtra("Km",String.valueOf(km));
+                    }
+                    else {
+                        data.putExtra("CodeLoc","5");
+                        data.putExtra("Km",String.valueOf(km));
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
+                    }
+                }else if(Loc.isChecked() && femella.isChecked() && Edat.isChecked()){
+                    if(desc.isChecked()){
+                        data.putExtra("CodeLoc","6");
+                        data.putExtra("Km",String.valueOf(km));
+                    }
+                    else{
+                        data.putExtra("CodeLoc","7");
+                        data.putExtra("Km",String.valueOf(km));
+                        data.putExtra("EdatMin",String.valueOf(edatMin));
+                        data.putExtra("EdatMax",String.valueOf(edatMax));
+                    }
+                }else if(Loc.isChecked() && mascle.isChecked() && Edat.isChecked()){
+                    if(desc.isChecked()){
+                        data.putExtra("CodeLoc","8");
+                        data.putExtra("Km",String.valueOf(km));
+                    }
+                    else{
+                        data.putExtra("CodeLoc","9");
+                        data.putExtra("Km",String.valueOf(km));
                         data.putExtra("EdatMin",String.valueOf(edatMin));
                         data.putExtra("EdatMax",String.valueOf(edatMax));
                     }
@@ -130,8 +169,8 @@ public class FiltraActivity extends AppCompatActivity {
 
         });
 
-        loc_bar.setProgress(10); //Per defecte
-        valor_km.setText("10 km");
+        loc_bar.setProgress(0); //Per defecte
+        valor_km.setText("0 km");
 
         loc_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

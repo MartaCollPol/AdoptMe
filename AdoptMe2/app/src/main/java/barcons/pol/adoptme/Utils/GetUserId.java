@@ -49,6 +49,8 @@ public class GetUserId {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     private DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
+    DatabaseReference GeoRef = database.getReference("geofire");
+    GeoFire geoFire = new GeoFire(GeoRef);
 
     private FirebaseRecyclerAdapter<Ad, ImgViewHolder> mAdapter;
 
@@ -62,9 +64,12 @@ public class GetUserId {
     private Button mDelete;
     private Button mEdit;
     private String mUserToCompare;
+    private int mDistance;
+    private String mCodeLoc;
+    private int mEdatMin;
+    private int mEdatMax;
 
-    DatabaseReference GeoRef = database.getReference("geofire");
-    GeoFire geoFire = new GeoFire(GeoRef);
+
 
     private GetUserId(Button mDelete, Button mEdit, String mUserToCompare,String mDeviceid,String mAdkey,Context mContext){
         this.mDelete = mDelete;
@@ -79,7 +84,6 @@ public class GetUserId {
         this.mSaved=mSaved;
         this.mDeviceid=mDeviceid;
     }
-
 
     public GetUserId(Context mContext,String mDeviceid,CheckBox mSavecheck,String mAdkey) {
         this.mContext=mContext;
@@ -96,6 +100,15 @@ public class GetUserId {
         this.mContext=mContext;
         this.mDeviceid=mDeviceid;
         this.rcvListImg=rcvListImg;
+    }
+    public GetUserId(Context mContext,String mDeviceid,RecyclerView rcvListImg,int mDistance,String mCodeLoc,int mEdatMin, int mEdatMax){
+        this.mDistance=mDistance;
+        this.mContext=mContext;
+        this.mDeviceid=mDeviceid;
+        this.rcvListImg=rcvListImg;
+        this.mCodeLoc=mCodeLoc;
+        this.mEdatMin=mEdatMin;
+        this.mEdatMax=mEdatMax;
     }
 
     public void GetUser(final int requestcode) {
@@ -133,6 +146,9 @@ public class GetUserId {
                             break;
                         case 5:
                             EditDelete(id,mUserToCompare,mDelete,mEdit,mAdkey);
+                            break;
+                        case 6:
+                            FilterLocation(mDistance,mContext,id,mCodeLoc,mEdatMin,mEdatMax);
                     }
 
                 } else {
@@ -311,20 +327,54 @@ public class GetUserId {
         }
 
     }
+    private void showinfo(View view,String adname){
+        Intent intent = new Intent(mContext, InfoActivity.class);
+        intent.putExtra("ad",adname);
+        mContext.startActivity(intent);
+    }
+
+    private void DistanceToTextView(String adloc, final TextView text){
+        GPSTracker mGPS = new GPSTracker(mContext);
+        final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
+        final float[] distance= new float[5];
+        geoFire.getLocation(adloc, new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if (location != null) {
+                    Location.distanceBetween (crntLocation.latitude,
+                            crntLocation.longitude,
+                            location.latitude,
+                            location.longitude,
+                            distance);
+                    float disInKm = Math.round(distance[0]/1000);
+                    String sDist = String.valueOf(disInKm)+" Km";
+                    text.setText(sDist);
+                } else {
+                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("There was an error getting the GeoFire location: " + databaseError);
+            }
+        });
+    }
 
     public void ClearedFirst(Query query){
         mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
                 Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
             @Override
             protected void populateViewHolder(final ImgViewHolder viewHolder, Ad model, final int position) {
+                GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
+                EditAndDelete.GetUser(5);
+                viewHolder.dateView.setText(model.data);
+
                 GetUserId NeedsCheck = new GetUserId(viewHolder.saveCheck,model.saved,mDeviceid);
                 NeedsCheck.GetUser(4);
 
                 NeedsADelete(model.data,getRef(position).getKey());
-                GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
-                EditAndDelete.GetUser(5);
-                viewHolder.dateView.setText(model.data);
-                knowDistance(getRef(position).getKey(),viewHolder.nameView);
+
+                DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
                 Glide.with(mContext)
                         .load(model.url)
                         .centerCrop()
@@ -362,40 +412,110 @@ public class GetUserId {
 
     }
 
-    private void showinfo(View view,String adname){
-        Intent intent = new Intent(mContext, InfoActivity.class);
-        intent.putExtra("ad",adname);
-        mContext.startActivity(intent);
+    public  void FilterLocation(int distance, Context ctx, String user,String codeloc,int edatmin, int edatmax){
+        DistanceQueries GetAdsToQuery=new DistanceQueries(distance,ctx,user);
+        UsersRef.child(user).child("AdsToQuery").removeValue();
+
+        String Sedatmin;
+        String Sedatmax;
+        if(mEdatMin>=10){
+            Sedatmin="d"+String.valueOf(edatmin);
+        }else Sedatmin=String.valueOf(edatmin);
+        if(mEdatMax>=10){
+            Sedatmax="d"+String.valueOf(edatmax);
+        }else Sedatmax=String.valueOf(edatmax);
+
+        switch (codeloc) {
+            case "1":
+                GetAdsToQuery.DistanceQuery();
+                break;
+            case "2":
+                GetAdsToQuery.DistanceQueryMF("female");
+                break;
+            case "3":
+                GetAdsToQuery.DistanceQueryMF("male");
+                break;
+            case "4":
+                GetAdsToQuery.DistanceQueryUNK();
+                break;
+            case "5":
+                GetAdsToQuery.DistanceQueryKN(edatmin,edatmax);
+                break;
+            case "6":
+                GetAdsToQuery.DistanceQueryMFUNK("F");
+                break;
+            case "7":
+                GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"F");
+            case "8":
+                GetAdsToQuery.DistanceQueryMFUNK("M");
+                break;
+            case "9":
+                GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"M");
+                break;
+        }
+
+        ClearedFirstLoc(user);
     }
 
-    private void knowDistance(String adloc, final TextView text){
-                GPSTracker mGPS = new GPSTracker(mContext);
-                final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
-                final float[] distance= new float[5];
-
-            geoFire.getLocation(adloc, new LocationCallback() {
+    private void ClearedFirstLoc(final String user){
+        FirebaseRecyclerAdapter<Boolean,ImgViewHolder> AdaptLoc;
+        AdaptLoc = new FirebaseRecyclerAdapter<Boolean, ImgViewHolder>(
+                Boolean.class, R.layout.anunci, ImgViewHolder.class,UsersRef.child(user).child("AdsToQuery")) {
             @Override
-            public void onLocationResult(String key, GeoLocation location) {
-                                        if (location != null) {
-                                                Location.distanceBetween (crntLocation.latitude,
-                                                                                   crntLocation.longitude,
-                                                                                    location.latitude,
-                                                                                    location.longitude,
-                                                                                    distance);
-                                            float disInKm = distance[0]/1000;
-                                            String sDist = String.valueOf(disInKm);
-                                            text.setText(sDist + " Km");
-                                        } else {
-                                                System.out.println(String.format("There is no location for key %s in GeoFire", key));
-                                        }
+            protected void populateViewHolder(final ImgViewHolder viewHolder, Boolean model, final int position) {
+                String key = getRef(position).getKey();
+                AdsRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Ad locmodel= dataSnapshot.getValue(Ad.class);
+
+                        EditDelete(user,locmodel.user,viewHolder.btn_delete,viewHolder.btn_edit,getRef(position).getKey());
+                        NeedsACheck(user,viewHolder.saveCheck,locmodel.saved);
+                        NeedsADelete(locmodel.data,getRef(position).getKey());
+
+                        viewHolder.dateView.setText(locmodel.data);
+                        DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
+                        Glide.with(mContext)
+                                .load(locmodel.url)
+                                .centerCrop()
+                                .error(R.drawable.common_google_signin_btn_icon_dark)
+                                .into(viewHolder.imageView);
+
+                        viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                GetUserId SaveAd = new GetUserId(mContext,mDeviceid,viewHolder.saveCheck,getRef(position).getKey());
+                                SaveAd.GetUser(1);
+                                notifyDataSetChanged();
+                            }
+                        });
+                        viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showinfo(v,getRef(position).getKey());
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("AdaptLoc","DatabaseError");
+                    }
+
+                });
             }
-                @Override
-           public void onCancelled(DatabaseError databaseError) {
-                                      System.err.println("There was an error getting the GeoFire location: " + databaseError);
-            }
-       });
+        };
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setReverseLayout(false);
+        rcvListImg.setHasFixedSize(false);
+        rcvListImg.setLayoutManager(layoutManager);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
+        Drawable Divider = ContextCompat.getDrawable(mContext,R.drawable.divider_sample);
+
+        itemDecoration.setDrawable(Divider);
+        rcvListImg.addItemDecoration(itemDecoration);
+
+        rcvListImg.setAdapter(AdaptLoc);
 
     }
-
-
 }

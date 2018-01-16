@@ -238,17 +238,30 @@ public class MainActivity extends AppCompatActivity {
                 String codi =data.getStringExtra("Codi");
                 String SedatMin = data.getStringExtra("EdatMin");
                 String SedatMax = data.getStringExtra("EdatMax");
+                String codiloc=data.getStringExtra("CodeLoc");
+                String Sdistance=data.getStringExtra("Km");
+
+                Log.e("mcoll","Valors: "+codiloc+" "+Sdistance+" "+SedatMin+" "+SedatMax);
                 int edatMin = -1;
                 int edatMax = -1;
                 if(SedatMin!=null){
                     edatMin = Integer.parseInt(SedatMin);
                     edatMax = Integer.parseInt(SedatMax);
                 }
-                GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
-                Queries Filtra = new Queries(codi,edatMin,edatMax);
 
-                Query query = Filtra.ResultQuery();
-                DisplayAds.ClearedFirst(query);
+                if(codiloc!= null){
+                    GetUserId DisplayAdsLoc = new GetUserId(MainActivity.this,deviceId,rcvListImg,
+                            Integer.parseInt(Sdistance),codiloc,edatMin,edatMax);
+                    DisplayAdsLoc.GetUser(6);
+
+                }else{
+                    GetUserId DisplayAds = new GetUserId(MainActivity.this,deviceId,rcvListImg);
+                    Queries Filtra = new Queries(codi,edatMin,edatMax);
+
+                    Query query = Filtra.ResultQuery();
+                    DisplayAds.ClearedFirst(query);
+                }
+
 
             }
         }
@@ -279,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 }
 

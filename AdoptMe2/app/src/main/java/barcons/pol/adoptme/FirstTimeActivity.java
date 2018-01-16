@@ -40,7 +40,7 @@ public class FirstTimeActivity extends AppCompatActivity {
                 User user = new User(nameToSave,uid);
                 UsersRef.push().setValue(user);
 
-               finish();
+                finish();
             }
         });
 

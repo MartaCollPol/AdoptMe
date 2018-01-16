@@ -1,15 +1,12 @@
 package barcons.pol.adoptme;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -38,7 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -167,8 +163,6 @@ public class CreaActivity extends AppCompatActivity {
                     if (mGPS.canGetLocation) {
                         CreaAnunci(); //GuardaLoc esta a dins de CreaAnunci();
                         finish();
-                    } else {
-                        buildAlertMessageNoGps();
                     }
                 }
                 break;
@@ -429,27 +423,6 @@ public class CreaActivity extends AppCompatActivity {
         GeoLocation currentlocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
         geoFire.setLocation(adloc,currentlocation);
     }
-
-
-  protected void buildAlertMessageNoGps() {
-
-      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage(R.string.locationcrea)
-              .setCancelable(false)
-              .setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-                  public void onClick(final DialogInterface dialog, final int id) {
-                      startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                  }
-              })
-              .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
-                  public void onClick(final DialogInterface dialog, final int id) {
-                      dialog.cancel();
-                  }
-              });
-      final AlertDialog alert = builder.create();
-      alert.show();
-  }
-
 
     //INTENT DE CÀMERA
     static final int REQUEST_TAKE_PHOTO = 110;

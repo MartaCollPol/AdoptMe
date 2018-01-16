@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -20,6 +21,8 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.LocationCallback;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -168,10 +171,7 @@ public class GetUserId {
     }
 
     private void EditDelete(String user, final String userToCompare, Button btn_delete, Button btn_edit, final String adkey){
-        if(!user.equals(userToCompare)){
-            btn_edit.setVisibility(View.INVISIBLE);
-            btn_delete.setVisibility(View.INVISIBLE);
-        }else{
+        if(user.equals(userToCompare)) {
             btn_edit.setVisibility(View.VISIBLE);
             btn_delete.setVisibility(View.VISIBLE);
 
@@ -187,28 +187,29 @@ public class GetUserId {
                     AdsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChild(adkey)){
+                            if (dataSnapshot.hasChild(adkey)) {
                                 AdsRef.child(adkey).removeValue();
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Log.e("GetUserId/Delete","DatabaseError");
+                            Log.e("GetUserId/Delete", "DatabaseError");
                         }
                     });
                 }
             });
 
+            btn_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CreaActivity.class);
+                    intent.putExtra("user", userToCompare);
+                    intent.putExtra("ad", adkey);
+                    mContext.startActivity(intent);
+                }
+            });
         }
-        btn_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, CreaActivity.class);
-                intent.putExtra("user", userToCompare);
-                intent.putExtra("ad",adkey);
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     private void NeedsACheck(final String user,final CheckBox check,HashMap<String, Object> savedAds) {
@@ -265,6 +266,206 @@ public class GetUserId {
         ClearedFirst(query);
     }
 
+    private void showinfo(View view,String adname){
+        Intent intent = new Intent(mContext, InfoActivity.class);
+        intent.putExtra("ad",adname);
+        mContext.startActivity(intent);
+    }
+
+    private void DistanceToTextView(String adloc, final TextView text){
+        GPSTracker mGPS = new GPSTracker(mContext);
+        final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
+        final float[] distance= new float[5];
+        geoFire.getLocation(adloc, new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if (location != null) {
+                    Location.distanceBetween (crntLocation.latitude,
+                            crntLocation.longitude,
+                            location.latitude,
+                            location.longitude,
+                            distance);
+                    float disInKm = Math.round(distance[0]/1000);
+                    String sDist = String.valueOf(disInKm)+" Km";
+                    text.setText(sDist);
+                } else {
+                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("There was an error getting the GeoFire location: " + databaseError);
+            }
+        });
+    }
+
+    public void ClearedFirst(Query query){
+        mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
+                Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
+            @Override
+            protected void populateViewHolder(final ImgViewHolder viewHolder, Ad model, final int position) {
+                viewHolder.btn_delete.setVisibility(View.INVISIBLE);
+                viewHolder.btn_edit.setVisibility(View.INVISIBLE);
+                GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
+                EditAndDelete.GetUser(5);
+                viewHolder.dateView.setText(model.data);
+
+                GetUserId NeedsCheck = new GetUserId(viewHolder.saveCheck,model.saved,mDeviceid);
+                NeedsCheck.GetUser(4);
+
+                NeedsADelete(model.data,getRef(position).getKey());
+
+                DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
+                Glide.with(mContext)
+                        .load(model.url)
+                        .centerCrop()
+                        .error(R.drawable.common_google_signin_btn_icon_dark)
+                        .into(viewHolder.imageView);
+
+                viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        GetUserId SaveAd = new GetUserId(mContext,mDeviceid,viewHolder.saveCheck,getRef(position).getKey());
+                        SaveAd.GetUser(1);
+                        notifyDataSetChanged();
+                    }
+                });
+                viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showinfo(v,getRef(position).getKey());
+                    }
+                });
+            }
+        };
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setReverseLayout(false);
+        rcvListImg.setHasFixedSize(false);
+        rcvListImg.setLayoutManager(layoutManager);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
+        Drawable Divider = ContextCompat.getDrawable(mContext,R.drawable.divider_sample);
+
+        itemDecoration.setDrawable(Divider);
+        rcvListImg.addItemDecoration(itemDecoration);
+
+        rcvListImg.setAdapter(mAdapter);
+
+    }
+
+    private void FilterLocation(int distance, Context ctx, final String user, final String codeloc, final int edatmin, final int edatmax){
+        final DistanceQueries GetAdsToQuery=new DistanceQueries(distance,ctx,user);
+        UsersRef.child(user).child("AdsToQuery").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                String Sedatmin;
+                String Sedatmax;
+                if(mEdatMin>=10){
+                    Sedatmin="d"+String.valueOf(edatmin);
+                }else Sedatmin=String.valueOf(edatmin);
+                if(mEdatMax>=10){
+                    Sedatmax="d"+String.valueOf(edatmax);
+                }else Sedatmax=String.valueOf(edatmax);
+
+                switch (codeloc) {
+                    case "1":
+                        GetAdsToQuery.DistanceQuery();
+                        break;
+                    case "2":
+                        GetAdsToQuery.DistanceQueryMF("female");
+                        break;
+                    case "3":
+                        GetAdsToQuery.DistanceQueryMF("male");
+                        break;
+                    case "4":
+                        GetAdsToQuery.DistanceQueryUNK();
+                        break;
+                    case "5":
+                        GetAdsToQuery.DistanceQueryKN(edatmin,edatmax);
+                        break;
+                    case "6":
+                        GetAdsToQuery.DistanceQueryMFUNK("F");
+                        break;
+                    case "7":
+                        GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"F");
+                    case "8":
+                        GetAdsToQuery.DistanceQueryMFUNK("M");
+                        break;
+                    case "9":
+                        GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"M");
+                        break;
+                }
+
+                ClearedFirstLoc(user);
+            }
+        });
+
+    }
+
+    private void ClearedFirstLoc(final String user){
+        FirebaseRecyclerAdapter<Boolean,ImgViewHolder> AdaptLoc;
+        AdaptLoc = new FirebaseRecyclerAdapter<Boolean, ImgViewHolder>(
+                Boolean.class, R.layout.anunci, ImgViewHolder.class,UsersRef.child(user).child("AdsToQuery")) {
+            @Override
+            protected void populateViewHolder(final ImgViewHolder viewHolder, Boolean model, final int position) {
+                viewHolder.btn_delete.setVisibility(View.INVISIBLE);
+                viewHolder.btn_edit.setVisibility(View.INVISIBLE);
+                String key = getRef(position).getKey();
+                AdsRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Ad locmodel= dataSnapshot.getValue(Ad.class);
+
+                        EditDelete(user,locmodel.user,viewHolder.btn_delete,viewHolder.btn_edit,getRef(position).getKey());
+                        NeedsACheck(user,viewHolder.saveCheck,locmodel.saved);
+                        NeedsADelete(locmodel.data,getRef(position).getKey());
+
+                        viewHolder.dateView.setText(locmodel.data);
+                        DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
+                        Glide.with(mContext)
+                                .load(locmodel.url)
+                                .centerCrop()
+                                .error(R.drawable.common_google_signin_btn_icon_dark)
+                                .into(viewHolder.imageView);
+
+                        viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                GetUserId SaveAd = new GetUserId(mContext,mDeviceid,viewHolder.saveCheck,getRef(position).getKey());
+                                SaveAd.GetUser(1);
+                                notifyDataSetChanged();
+                            }
+                        });
+                        viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showinfo(v,getRef(position).getKey());
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("AdaptLoc","DatabaseError");
+                    }
+
+                });
+            }
+        };
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setReverseLayout(false);
+        rcvListImg.setHasFixedSize(false);
+        rcvListImg.setLayoutManager(layoutManager);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
+        Drawable Divider = ContextCompat.getDrawable(mContext,R.drawable.divider_sample);
+
+        itemDecoration.setDrawable(Divider);
+        rcvListImg.addItemDecoration(itemDecoration);
+
+        rcvListImg.setAdapter(AdaptLoc);
+
+    }
+    //Eliminem anuncis antics
     private void NeedsADelete(String data, final String adkey){
         Calendar current = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.FRENCH);
@@ -325,197 +526,6 @@ public class GetUserId {
                 }
             });
         }
-
-    }
-    private void showinfo(View view,String adname){
-        Intent intent = new Intent(mContext, InfoActivity.class);
-        intent.putExtra("ad",adname);
-        mContext.startActivity(intent);
-    }
-
-    private void DistanceToTextView(String adloc, final TextView text){
-        GPSTracker mGPS = new GPSTracker(mContext);
-        final GeoLocation crntLocation = new GeoLocation(mGPS.getLatitude(),mGPS.getLongitude());
-        final float[] distance= new float[5];
-        geoFire.getLocation(adloc, new LocationCallback() {
-            @Override
-            public void onLocationResult(String key, GeoLocation location) {
-                if (location != null) {
-                    Location.distanceBetween (crntLocation.latitude,
-                            crntLocation.longitude,
-                            location.latitude,
-                            location.longitude,
-                            distance);
-                    float disInKm = Math.round(distance[0]/1000);
-                    String sDist = String.valueOf(disInKm)+" Km";
-                    text.setText(sDist);
-                } else {
-                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.err.println("There was an error getting the GeoFire location: " + databaseError);
-            }
-        });
-    }
-
-    public void ClearedFirst(Query query){
-        mAdapter = new FirebaseRecyclerAdapter<Ad, ImgViewHolder>(
-                Ad.class, R.layout.anunci, ImgViewHolder.class, query) {
-            @Override
-            protected void populateViewHolder(final ImgViewHolder viewHolder, Ad model, final int position) {
-                GetUserId EditAndDelete = new GetUserId(viewHolder.btn_delete,viewHolder.btn_edit,model.user,mDeviceid,getRef(position).getKey(), mContext);
-                EditAndDelete.GetUser(5);
-                viewHolder.dateView.setText(model.data);
-
-                GetUserId NeedsCheck = new GetUserId(viewHolder.saveCheck,model.saved,mDeviceid);
-                NeedsCheck.GetUser(4);
-
-                NeedsADelete(model.data,getRef(position).getKey());
-
-                DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
-                Glide.with(mContext)
-                        .load(model.url)
-                        .centerCrop()
-                        .error(R.drawable.common_google_signin_btn_icon_dark)
-                        .into(viewHolder.imageView);
-
-                viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        GetUserId SaveAd = new GetUserId(mContext,mDeviceid,viewHolder.saveCheck,getRef(position).getKey());
-                        SaveAd.GetUser(1);
-                        notifyDataSetChanged();
-                    }
-                });
-                viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showinfo(v,getRef(position).getKey());
-                    }
-                });
-            }
-        };
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setReverseLayout(false);
-        rcvListImg.setHasFixedSize(false);
-        rcvListImg.setLayoutManager(layoutManager);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
-        Drawable Divider = ContextCompat.getDrawable(mContext,R.drawable.divider_sample);
-
-        itemDecoration.setDrawable(Divider);
-        rcvListImg.addItemDecoration(itemDecoration);
-
-        rcvListImg.setAdapter(mAdapter);
-
-    }
-
-    public  void FilterLocation(int distance, Context ctx, String user,String codeloc,int edatmin, int edatmax){
-        DistanceQueries GetAdsToQuery=new DistanceQueries(distance,ctx,user);
-        UsersRef.child(user).child("AdsToQuery").removeValue();
-
-        String Sedatmin;
-        String Sedatmax;
-        if(mEdatMin>=10){
-            Sedatmin="d"+String.valueOf(edatmin);
-        }else Sedatmin=String.valueOf(edatmin);
-        if(mEdatMax>=10){
-            Sedatmax="d"+String.valueOf(edatmax);
-        }else Sedatmax=String.valueOf(edatmax);
-
-        switch (codeloc) {
-            case "1":
-                GetAdsToQuery.DistanceQuery();
-                break;
-            case "2":
-                GetAdsToQuery.DistanceQueryMF("female");
-                break;
-            case "3":
-                GetAdsToQuery.DistanceQueryMF("male");
-                break;
-            case "4":
-                GetAdsToQuery.DistanceQueryUNK();
-                break;
-            case "5":
-                GetAdsToQuery.DistanceQueryKN(edatmin,edatmax);
-                break;
-            case "6":
-                GetAdsToQuery.DistanceQueryMFUNK("F");
-                break;
-            case "7":
-                GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"F");
-            case "8":
-                GetAdsToQuery.DistanceQueryMFUNK("M");
-                break;
-            case "9":
-                GetAdsToQuery.DistanceQueryMFKN(Sedatmin,Sedatmax,"M");
-                break;
-        }
-
-        ClearedFirstLoc(user);
-    }
-
-    private void ClearedFirstLoc(final String user){
-        FirebaseRecyclerAdapter<Boolean,ImgViewHolder> AdaptLoc;
-        AdaptLoc = new FirebaseRecyclerAdapter<Boolean, ImgViewHolder>(
-                Boolean.class, R.layout.anunci, ImgViewHolder.class,UsersRef.child(user).child("AdsToQuery")) {
-            @Override
-            protected void populateViewHolder(final ImgViewHolder viewHolder, Boolean model, final int position) {
-                String key = getRef(position).getKey();
-                AdsRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Ad locmodel= dataSnapshot.getValue(Ad.class);
-
-                        EditDelete(user,locmodel.user,viewHolder.btn_delete,viewHolder.btn_edit,getRef(position).getKey());
-                        NeedsACheck(user,viewHolder.saveCheck,locmodel.saved);
-                        NeedsADelete(locmodel.data,getRef(position).getKey());
-
-                        viewHolder.dateView.setText(locmodel.data);
-                        DistanceToTextView(getRef(position).getKey(),viewHolder.nameView);
-                        Glide.with(mContext)
-                                .load(locmodel.url)
-                                .centerCrop()
-                                .error(R.drawable.common_google_signin_btn_icon_dark)
-                                .into(viewHolder.imageView);
-
-                        viewHolder.saveCheck.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                GetUserId SaveAd = new GetUserId(mContext,mDeviceid,viewHolder.saveCheck,getRef(position).getKey());
-                                SaveAd.GetUser(1);
-                                notifyDataSetChanged();
-                            }
-                        });
-                        viewHolder.btn_info.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showinfo(v,getRef(position).getKey());
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("AdaptLoc","DatabaseError");
-                    }
-
-                });
-            }
-        };
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setReverseLayout(false);
-        rcvListImg.setHasFixedSize(false);
-        rcvListImg.setLayoutManager(layoutManager);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext, layoutManager.getOrientation());
-        Drawable Divider = ContextCompat.getDrawable(mContext,R.drawable.divider_sample);
-
-        itemDecoration.setDrawable(Divider);
-        rcvListImg.addItemDecoration(itemDecoration);
-
-        rcvListImg.setAdapter(AdaptLoc);
 
     }
 }

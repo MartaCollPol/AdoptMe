@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import barcons.pol.adoptme.Objectes.Ad;
 import barcons.pol.adoptme.Objectes.User;
@@ -38,7 +37,6 @@ public class InfoActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference UsersRef = database.getReference(FirebaseReferences.usersRef);
     DatabaseReference AdsRef = database.getReference(FirebaseReferences.adsRef);
-    StorageReference ImgRef;
 
     // /Objectes per facilitar la lectura del contingut de la base de dades
     Ad anunci;
@@ -54,7 +52,6 @@ public class InfoActivity extends AppCompatActivity {
         return true;
     }
 
-    //Opcions que hi haura a la barra de dalt
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -142,30 +139,6 @@ public class InfoActivity extends AppCompatActivity {
 
         });
     }
-    /*
-    //Asynctask per descarregar la imatge des de l'url
-    @SuppressLint("StaticFieldLeak")
-    public class DownloadImage extends AsyncTask<Uri, Void, String> {
-        private static final String TAG = "DownloadImage";
-        @Override
-        protected String doInBackground(Uri... params) {
-            return params[0].toString();
-
-        }
-
-        @Override
-        protected void onPostExecute(String result){
-            if(result!=null){
-                Glide.with(InfoActivity.this)
-                        .load(result)
-                        .centerCrop()
-                        .error(R.drawable.common_google_signin_btn_icon_dark)
-                        .into(showimg);
-
-            }
-            else Log.i(TAG,"Could not set the image");
-        }
-    } */
 
     private void DistanceToTextView(String adloc, final TextView text){
         GPSTracker mGPS = new GPSTracker(InfoActivity.this);

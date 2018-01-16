@@ -13,7 +13,7 @@
     <string name="nom">Name</string>
     <string name="telefon">Phone</string>
     <string name="email">Email</string>
-    <string name="action_OK">OK</string>
+    <string name="action_OK" translatable="false">OK</string>
     <string name="action_filtra">Filter</string>
     <string name="localització">Location</string>
     <string name="omple">Fill the missing fields</string>
@@ -23,11 +23,6 @@
     <string name="cognom">Surname</string>
     <string name="next">NEXT</string>
     <string name="writenotallowed">The app will not work without Write permissions</string>
-    <string name="locationenable">Please, turn on the location or the distance will not work propertly</string>
-    <string name="YES" translatable="false">OK</string>
-    <string name="NO" translatable="false">NO</string>
-    <string name="locationcrea">Please, turn on the location to continue</string>
-    <string name="title_location_permission">Location permission</string>
-    <string name="text_location_permission">Turn on location permission to use AdoptMe</string>
+    <string name="locationnotallowed">Please, turn on the location or the distance will not work propertly</string>
 
 </resources>

@@ -1,17 +1,21 @@
 package barcons.pol.adoptme;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +39,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import barcons.pol.adoptme.Utils.FirebaseReferences;
+import barcons.pol.adoptme.Utils.GPSTracker;
 import barcons.pol.adoptme.Utils.GetDeviceId;
 import barcons.pol.adoptme.Utils.GetUserId;
 import barcons.pol.adoptme.Utils.Queries;
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private String deviceId;
     String code;
     private boolean notsearch=false;
-
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,24 +119,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també,
-        // per a APIs inferiors a la 23 aquest permis s'activa permenentment en la instalació
-        starterintent = getIntent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(!Settings.System.canWrite(this)){
-            flag_is_write_permission_set = false;
-            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            intent.setData(Uri.parse("package:" + this.getPackageName()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(intent, MainActivity.CODE_WRITE_SETTINGS_PERMISSION);
-            } else {
-            flag_is_write_permission_set = true;
-            }
-        }else { flag_is_write_permission_set = true;}
+        GPSTracker mGPS = new GPSTracker(this);
+        if (!mGPS.canGetLocation) {
+            buildAlertMessageNoGps();
 
-        PermissionGranted(flag_is_write_permission_set);
+        }
+            //Demanem permisos per poder evitar que al rotar el dispositiu la app roti també,
+            // per a APIs inferiors a la 23 aquest permis s'activa permenentment en la instalació
+            starterintent = getIntent();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.System.canWrite(this)) {
+                    flag_is_write_permission_set = false;
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                    intent.setData(Uri.parse("package:" + this.getPackageName()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivityForResult(intent, MainActivity.CODE_WRITE_SETTINGS_PERMISSION);
+                } else {
+                    flag_is_write_permission_set = true;
+                }
+            } else {
+                flag_is_write_permission_set = true;
+            }
+
+            PermissionGranted(flag_is_write_permission_set);
 
     }
+
 
     private void PermissionGranted(boolean permission) {
         if (permission) {
@@ -223,6 +237,25 @@ public class MainActivity extends AppCompatActivity {
 
         } else finish();
     }
+    // Activar localització si no ho està
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.locationenable)
+                .setCancelable(false)
+                .setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -292,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 }
 
